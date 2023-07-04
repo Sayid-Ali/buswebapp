@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "../resources/layout.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Modal } from "antd";
 
 function DefaultLayout1({ children }) {
   const navigate = useNavigate();
-  const [collapsed, steCollapsed] = React.useState(false);
+  const [collapsed, steCollapsed] = useState(false);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false); // State for logout modal visibility
   const { user } = useSelector((state) => state.users);
   const userMenu = [
     {
@@ -19,12 +21,12 @@ function DefaultLayout1({ children }) {
       path: "bookings",
     },
     {
-      name: "profile",
+      name: "Profile",
       icon: "ri-file-user-line",
       path: "/profile",
     },
     {
-      name: "feedback",
+      name: "Feedback",
       icon: "ri-feedback-line",
       path: "/feedback",
     },
@@ -40,7 +42,7 @@ function DefaultLayout1({ children }) {
       path: "/",
       icon: "ri-home-line",
     },
-     {
+    {
       name: "Dashboard",
       icon: "ri-dashboard-line",
       path: "/admin/dashboard",
@@ -66,13 +68,28 @@ function DefaultLayout1({ children }) {
       icon: "ri-logout-box-r-line",
     },
   ];
-  // const menuToBeRendered = user?.isAdmin ? adminMenu : userMenu;
+
   const menuToBeRendered = user?.isAdmin ? adminMenu : userMenu;
 
   let activeRoute = window.location.pathname;
   if (window.location.pathname.includes("book-now")) {
     activeRoute = "/";
   }
+
+  const handleLogout = () => {
+    setLogoutModalVisible(false);
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  const showLogoutModal = () => {
+    setLogoutModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setLogoutModalVisible(false);
+  };
+
   return (
     <div className="layout-parent">
       <div className="sidebar">
@@ -82,7 +99,7 @@ function DefaultLayout1({ children }) {
             <h1 className="role">
               {user?.name}
               <br />
-              Role : {user && user?.isAdmin ? "Admin" : "User"}
+              Role: {user && user?.isAdmin ? "Admin" : "User"}
             </h1>
           </h1>
         </div>
@@ -99,8 +116,7 @@ function DefaultLayout1({ children }) {
                   <span
                     onClick={() => {
                       if (item.path === "/logout") {
-                        localStorage.removeItem("token");
-                        navigate("/login");
+                        showLogoutModal();
                       } else {
                         navigate(item.path);
                       }
@@ -130,6 +146,16 @@ function DefaultLayout1({ children }) {
         </div>
         <div className="content">{children} </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <Modal
+        title="Logout"
+        visible={logoutModalVisible}
+        onCancel={handleCancel}
+        onOk={handleLogout}
+      >
+        <p>Are you sure you want to logout?</p>
+      </Modal>
     </div>
   );
 }
