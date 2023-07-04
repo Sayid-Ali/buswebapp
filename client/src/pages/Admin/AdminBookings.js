@@ -1,19 +1,17 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
+import { message, Modal, Table, Checkbox, Button } from "antd";
+import { useReactToPrint } from "react-to-print";
 import PageTitle from "../../components/PageTitle";
-import BusForm from "../../components/BusForm";
 import { HideLoading, ShowLoading } from "../../redux/alertsSlice";
+import { useDispatch } from "react-redux";
+
 import { axiosInstance } from "../../helpers/axiosIntance";
 
-import { message, Modal, Table } from "antd";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useReactToPrint } from "react-to-print";
-
 function AdminBookings() {
-  const [showPrintModal, setShowPrintModal] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [selectedBookings, setSelectedBookings] = useState([]);
   const [bookings, setBookings] = useState([]);
+
   const dispatch = useDispatch();
 
   const getBookings = async () => {
@@ -41,7 +39,7 @@ function AdminBookings() {
       message.error(error.message);
     }
   };
-  //table of the data in the bookings
+
   const columns = [
     {
       title: "",
@@ -78,79 +76,77 @@ function AdminBookings() {
       title: "Action",
       dataIndex: "action",
       render: (text, record) => (
-        <div>
-          <h1
-            className="text-md underline"
-            onClick={() => {
-              setSelectedBooking(record);
-              setShowPrintModal(true);
-            }}
-          >
-            Print Ticket
-          </h1>
-        </div>
+        <Checkbox
+          onChange={(e) => {
+            if (e.target.checked) {
+              setSelectedBookings((prev) => [...prev, record]);
+            } else {
+              setSelectedBookings((prev) =>
+                prev.filter((booking) => booking.key !== record.key)
+              );
+            }
+          }}
+        />
       ),
     },
   ];
+
   useEffect(() => {
     getBookings();
   }, []);
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    onAfterPrint: () => {
-      setShowPrintModal(false);
-      setSelectedBooking(null);
-    },
-  });
+
+  const handlePrintSelected = () => {
+    if (selectedBookings.length === 0) {
+      message.error("Please select at least one booking.");
+      return;
+    }
+
+    const printWindow = window.open("", "_blank");
+    const htmlContent = selectedBookings.map((booking) => {
+      return `
+        <div>
+          <p>Mumtaz Bus LTD</p>
+          <p>Bus: ${booking.name}</p>
+          <p>${booking.from} - ${booking.to}</p>
+          <hr />
+          <p>
+            <span>Journey Date:</span> ${moment(booking.journeyDate).format(
+              "DD-MM-YYYY HH:mm:ss"
+            )}
+          </p>
+          <p>
+            <span>Journey Time:</span> ${booking.departure}
+          </p>
+          <p>
+            <hr />
+            <span>Seat Numbers:</span> <br />
+            ${booking.seats}
+          </p>
+          <hr />
+          <p>
+            <span>Total Amount:</span> ${booking.fare * booking.seats.length} /-
+          </p>
+          <p>
+            <span>Printed Date:</span> ${moment().format("DD-MM-YYYY")}
+          </p>
+        </div>
+      `;
+    });
+
+    printWindow.document.write(htmlContent.join(""));
+    printWindow.print();
+  };
+
   return (
     <div>
       <PageTitle title={"Bookings"} />
       <div className="mt-2">
         <Table dataSource={bookings} columns={columns} />
       </div>
-      {showPrintModal && (
-        <Modal
-          title="Print Ticket"
-          onCancel={() => {
-            setShowPrintModal(false);
-            setSelectedBooking(null);
-          }}
-          visible={showPrintModal}
-          okText="Print"
-          onOk={handlePrint}
-        >
-          <div className="d-flex flex-column p-5 " ref={componentRef}>
-            <p>Mumtaz Bus LTD</p>
-            <p>Bus: {selectedBooking?.name}</p>
-            <p>
-              {selectedBooking?.from} - {selectedBooking?.to}
-            </p>
-            <hr />
-            <p>
-              <span>Journey Date:</span>{" "}
-              {moment(selectedBooking?.journeyDate).format(
-                "DD-MM-YYYY HH:mm:ss"
-              )}
-            </p>
-            <p>
-              <span>Journey Time:</span> {selectedBooking?.departure}
-            </p>
-            <p>
-              <hr />
-              <span>Seat Numbers:</span> <br />
-              {selectedBooking?.seats}
-            </p>
-            <hr />
-            <p>
-              <span>Total Amount:</span>{" "}
-              {selectedBooking?.fare * selectedBooking?.seats.length} /-
-            </p>
-            <p>
-              <span>Printed Date:</span> {moment().format("DD-MM-YYYY")}
-            </p>
-          </div>
-        </Modal>
+      {selectedBookings.length > 0 && (
+        <div className="mt-2">
+          <Button onClick={handlePrintSelected}>Print Selected Tickets</Button>
+        </div>
       )}
     </div>
   );

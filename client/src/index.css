@@ -1,30 +1,58 @@
-:root{
-    --primary:#058359;
-    --secondary:tomato;/*(, #6495ED)*/
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
-*{
+:root {
+    --primary: #058359;
+    --secondary: tomato; /*(, #6495ED)*/
+  }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+  * {
     font-family: 'Montserrat', sans-serif !important;
     font-size: 16px;
-}
-/* html, body ,*{
-    overflow-x: hidden !important;
-} */
-h1{
+  }
+  
+  h1 {
     font-family: sans-serif;
     font-weight: bold;
-}
-.landing{
+  }
+  
+  .landing {
     background-color: black;
     height: 100vh;
-    padding-top: 130px;
-}
-.landing .col-md-12{
-    border-right: 5px solid white;
-}
-.landingbtn{
+  }
+  
+  .landing .col-md-9 {
+    border-right: 8px solid white;
+  }
+  
+  .landingbtn {
     background-color: white !important;
-    color:black !important;
+    color: black !important;
     margin-top: 20px;
-}
+  }
+  
+  .features {
+    margin-top: 50px;
+  }
+  
+  .features .card {
+    margin-bottom: 30px;
+  }
+  
+  .footer {
+    background-color: #343434;
+    color: white;
+    padding: 30px 0;
+  }
+  
+  .footer h4 {
+    color: white;
+  }
+  
+  .footer ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .footer ul li {
+    margin-bottom: 10px;
+  }
+  

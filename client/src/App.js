@@ -16,6 +16,7 @@ import AdminBookings from "./pages/Admin/AdminBookings";
 import FeedbackForm from "./components/FeedbackForm";
 import landingpage from "./screens/Landingpage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import Userprofile from "./components/Userprofile";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -25,11 +26,21 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" exact Component={landingpage} />
+
           <Route
             path="home"
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Userprofile />
               </ProtectedRoute>
             }
           />
@@ -42,7 +53,7 @@ function App() {
             }
           />
           <Route
-            path="/bookings"
+            path="/home/bookings"
             element={
               <ProtectedRoute>
                 <Bookings />
