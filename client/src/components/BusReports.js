@@ -19,9 +19,7 @@ const BusReports = () => {
   }, []);
 
   const fetchBusData = async () => {
-     // Generate dummy data
-    //  const dummyData = generateDummyData();
-    //  setData(dummyData);
+   
     try {
         dispatch(ShowLoading());
         const response = await axiosInstance.post(
@@ -45,43 +43,7 @@ const BusReports = () => {
 
 
 
-  const generateDummyData = () => {
-    return [
-      {
-        id: 1,
-        name: 'Bus A',
-        number: 'A123',
-        from: 'City X',
-        to: 'City Y',
-        capacity: 5,
-        seatsBooked: [5, 1, 4, 2, 3],
-        fare: 1000,
-        expenses: 0,
-      },
-      {
-        id: 2,
-        name: 'Bus B',
-        number: 'B456',
-        from: 'City Y',
-        to: 'City Z',
-        capacity: 10,
-        seatsBooked: [2, 4, 6, 8, 10],
-        fare: 1000,
-        expenses: 300,
-      },
-      {
-        id: 3,
-        name: 'Bus C',
-        number: 'C789',
-        from: 'City Z',
-        to: 'City X',
-        capacity: 20,
-        seatsBooked: [1, 2, 3, 4, 5, 15, 16, 17, 18, 9],
-        fare: 1000,
-        expenses: 500,
-      },
-    ];
-  };
+  
 
   const columns = [
     {
@@ -295,7 +257,7 @@ const CustomTable = ({ data }) => (
     return (
       <PDFDownloadLink document={<MyDoc />} fileName="bus_reports.pdf">
         {({ blob, url, loading, error }) =>
-          loading ? 'Generating PDF...' : <Button type="primary">Download as PDF</Button>
+          loading ? 'Generating PDF...' : <button className='primary-btn' type="primary">Download as PDF</button>
         }
       </PDFDownloadLink>
     );
@@ -306,9 +268,9 @@ const CustomTable = ({ data }) => (
         <h3>Completed Trips Report</h3>
       <div style={{ marginBottom: '1rem' }}>
         {generatePDF()}
-        <Button type="primary" onClick={handleDownloadExcel} style={{ marginLeft: '1rem' }}>
+        <button type="primary" className='primary-btn' onClick={handleDownloadExcel} style={{ marginLeft: '1rem' }}>
           Download as Excel
-        </Button>
+        </button>
       </div>
       <Table dataSource={data} columns={columns} rowKey="id" />
       
