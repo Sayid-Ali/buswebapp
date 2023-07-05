@@ -16,7 +16,7 @@ function DefaultLayout1({ children }) {
     {
       name: "Bookings",
       icon: "ri-file-list-line",
-      path: "bookings",
+      path: "/bookings",
     },
     {
       name: "profile",
@@ -40,7 +40,7 @@ function DefaultLayout1({ children }) {
       path: "/",
       icon: "ri-home-line",
     },
-     {
+    {
       name: "Dashboard",
       icon: "ri-dashboard-line",
       path: "/admin/dashboard",

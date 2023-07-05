@@ -26,7 +26,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" exact Component={landingpage} />
-
           <Route
             path="home"
             element={
@@ -35,7 +34,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/profile"
             element={
@@ -53,14 +51,21 @@ function App() {
             }
           />
           <Route
-            path="/home/bookings"
+            path="/bookings"
             element={
               <ProtectedRoute>
                 <Bookings />
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/feedback"
+            element={
+              <ProtectedRoute>
+                <FeedbackForm />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/admin/buses"
             element={
@@ -78,8 +83,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-
           <Route
             path="/admin/users"
             element={
@@ -96,7 +99,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/register"
             element={
@@ -113,7 +115,6 @@ function App() {
               </PublicRoute>
             }
           />
-          <Route path="/feedback" element={<FeedbackForm />} />
         </Routes>
       </BrowserRouter>
     </div>
