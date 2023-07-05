@@ -40,6 +40,11 @@ function DefaultLayout1({ children }) {
       path: "/",
       icon: "ri-home-line",
     },
+     {
+      name: "Dashboard",
+      icon: "ri-dashboard-line",
+      path: "/admin/dashboard",
+    },
     {
       name: "Buses",
       path: "/admin/buses",

@@ -15,6 +15,7 @@ import Bookings from "./pages/Bookings";
 import AdminBookings from "./pages/Admin/AdminBookings";
 import FeedbackForm from "./components/FeedbackForm";
 import landingpage from "./screens/Landingpage";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 import Userprofile from "./components/Userprofile";
 
 function App() {
@@ -68,6 +69,17 @@ function App() {
               </ProtectedRoute>
             }
           />
+          // add admin dashboard route
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+
           <Route
             path="/admin/users"
             element={
