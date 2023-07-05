@@ -5,23 +5,23 @@ import { axiosInstance } from "../helpers/axiosIntance";
 import { HideLoading, ShowLoading } from "../redux/alertsSlice";
 import { Col, Row, message } from "antd";
 import Bus from "../components/Bus";
-import { Select } from "antd"; //added
-const { Option } = Select; //added
+import { Select } from "antd";
+
+const { Option } = Select;
 
 function Home() {
   const dispatch = useDispatch();
   const [buses, setBuses] = useState([]);
   const { user } = useSelector((state) => state.users);
   const [selectedBus, setSelectedBus] = useState("");
-  const [filters = {}, setFilters] = useState({});
+  const [filters, setFilters] = useState({});
 
   const getBuses = async () => {
-    const tempFilters = {};
-    Object.keys(filters).forEach((key) => {
-      if (filters[key]) {
-        tempFilters[key] = filters[key];
-      }
-    });
+    const tempFilters = {
+      journeyDate: filters.journeyDate,
+      from: filters.from,
+      to: filters.to,
+    };
 
     try {
       dispatch(ShowLoading());
@@ -36,11 +36,13 @@ function Home() {
       );
       dispatch(HideLoading());
       if (response.data.success) {
-        setBuses(
-          response.data.data.filter((bus) => {
-            return bus.busName === filters.busName;
-          })
-        );
+        const filteredBuses = response.data.data.filter((bus) => {
+          return (
+            (!tempFilters.from || bus.from === tempFilters.from) &&
+            (!tempFilters.to || bus.to === tempFilters.to)
+          );
+        });
+        setBuses(filteredBuses);
       } else {
         message.error(response.data.message);
       }
@@ -49,6 +51,7 @@ function Home() {
       message.error(error.message);
     }
   };
+
   useEffect(() => {
     getBuses();
   }, []);
@@ -63,12 +66,13 @@ function Home() {
               value={filters.from}
               onChange={(value) => setFilters({ ...filters, from: value })}
             >
-              <Option value="Nairobi">NAIROBI</Option>
-              <Option value="Garissa">GARISSA</Option>
-              <Option value="Wajir">WAJIR</Option>
-              <Option value="Elwak">ELWAK</Option>
-              <Option value="Mandera">MANDERA</Option>
-              {/* Add more Option components for your available locations */}
+              <Option value="Nairobi">Nairobi</Option>
+              <Option value="Garissa">Garissa</Option>
+              <Option value="Wajir">Wajir</Option>
+              <Option value="Elwak">Elwak</Option>
+              <Option value="Mandera">Mandera</Option>
+              <Option value="Isiolo">Isiolo</Option>
+              {/*  we can add more Option available locations */}
             </Select>
           </Col>
           <Col lg={6} sm={24}>
@@ -77,13 +81,14 @@ function Home() {
               value={filters.to}
               onChange={(value) => setFilters({ ...filters, to: value })}
             >
-              <Option value="Nairobi">NAIROBI</Option>
-              <Option value="Garissa">GARISSA</Option>
-              <Option value="Wajir">WAJIR</Option>
-              <Option value="Elwak">ELWAK</Option>
-              <Option value="Mandera">MANDERA</Option>
+              <Option value="Nairobi">Nairobi</Option>
+              <Option value="Garissa">Garissa</Option>
+              <Option value="Wajir">Wajir</Option>
+              <Option value="Elwak">Elwak</Option>
+              <Option value="Mandera">Mandera</Option>
+              <Option value="Isiolo">Isiolo</Option>
 
-              {/* Add more Option components for your available locations */}
+              {/*  we can add more Option available locations */}
             </Select>
           </Col>
           <Col lg={6} sm={24}>
@@ -92,7 +97,12 @@ function Home() {
               placeholder="Date"
               value={filters.journeyDate}
               onChange={(e) =>
-                setFilters({ ...filters, journeyDate: e.target.value })
+                setFilters({
+                  ...filters,
+                  journeyDate: e.target.value,
+                  from: filters.from,
+                  to: filters.to,
+                })
               }
             />
           </Col>

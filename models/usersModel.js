@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -20,7 +21,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    //db admin will give the user access when its required
+    // phoneNumber: {
+    //   type: String,
+    //   required: true,
+    // },
     isAdmin: {
       type: Boolean,
       default: false,
@@ -34,4 +38,5 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
 module.exports = mongoose.model("users", userSchema);

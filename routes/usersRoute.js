@@ -84,6 +84,35 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// added code today 3/07/2023
+// Get user profile
+router.get("/profile/:userId", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// Update user profile
+router.put("/profile/:userId", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
+      new: true,
+    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+//above here
 // Get user by Id
 router.post("/get-user-by-id", authMiddleware, async (req, res) => {
   try {
@@ -136,7 +165,33 @@ router.post("/update-user-permissions", authMiddleware, async (req, res) => {
     });
   }
 });
+// Get user profile
+router.get("/profile", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId); // Fetch the user profile using the authenticated user's ID
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
 
+// Update user profile
+router.put("/profile", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.user.userId, req.body, {
+      new: true,
+    }); // Update the user profile using the authenticated user's ID
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
 // All about the pdf
 // Add the following route handler to your router
 router.get("/generate-user-report", async (req, res) => {
