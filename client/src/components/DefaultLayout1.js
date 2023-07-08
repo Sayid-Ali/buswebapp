@@ -9,6 +9,7 @@ function DefaultLayout1({ children }) {
   const [collapsed, steCollapsed] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false); // State for logout modal visibility
   const { user } = useSelector((state) => state.users);
+  console.log(user);
   const userMenu = [
     {
       name: "Home",
@@ -42,6 +43,7 @@ function DefaultLayout1({ children }) {
       path: "/",
       icon: "ri-home-line",
     },
+    ,
     {
       name: "Dashboard",
       icon: "ri-dashboard-line",
@@ -69,7 +71,27 @@ function DefaultLayout1({ children }) {
     },
   ];
 
-  const menuToBeRendered = user?.isAdmin ? adminMenu : userMenu;
+  const operatorMenu = [
+    {
+      name: 'Home',
+      path: '/home',
+      icon: 'ri-home-line'
+    },
+      {
+        name: "Buses",
+        path: "/operator/buses",
+        icon: "ri-bus-line",
+      },
+      {
+        name: "Logout",
+        path: "/logout",
+        icon: "ri-logout-box-r-line",
+      },
+    
+
+  ]
+
+  const menuToBeRendered = user?.isAdmin ? adminMenu : (user?.isOperator ? operatorMenu : userMenu);
 
   let activeRoute = window.location.pathname;
   if (window.location.pathname.includes("book-now")) {
@@ -97,9 +119,9 @@ function DefaultLayout1({ children }) {
           <h1 className="logo">MBL</h1>
           <h1 className="role">
             <h1 className="role">
-              {user?.name}
+              {user?.firstName ? user.firstName : user.name}
               <br />
-              Role: {user && user?.isAdmin ? "Admin" : "User"}
+              Role: {user && user?.isAdmin ? "Admin" : ( user?.isOperator ? "Operator" : "User")}
             </h1>
           </h1>
         </div>

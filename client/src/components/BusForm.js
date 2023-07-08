@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Modal, Row, Col, Form, message } from "antd";
 import { axiosInstance } from "../helpers/axiosIntance";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { HideLoading, ShowLoading } from "../redux/alertsSlice";
 import moment from "moment";
 
@@ -12,7 +12,41 @@ function BusForm({
   getData,
   selectedBus,
   setSelectedBus,
+  users,
 }) {
+
+  const user = useSelector((state) => state.users.user);
+
+
+//get all operators from http://localhost:5000/api/operator/get-all-operators
+const [operators, setOperators] = useState([]);
+
+const getOperators = async () => {
+  try {
+    dispatch(ShowLoading());
+    const response = await axiosInstance.get(
+      "http://localhost:5000/api/operator/get-all-operators",
+      {}
+    );
+    dispatch(HideLoading());
+    if (response.data.success) {
+      setOperators(response.data.data);
+    } else {
+      message.error(response.data.message);
+    }
+  } catch (error) {
+    dispatch(HideLoading());
+    message.error(error.message);
+  }
+};
+
+useEffect (() => {
+  getOperators();
+
+}, [])
+
+ 
+  console.log('operators', operators)
   const dispatch = useDispatch();
   const validateDate = (_, value) => {
     const currentDate = moment().format("YYYY-MM-DD");
@@ -57,7 +91,7 @@ function BusForm({
   return (
     <Modal
       width={800} //style={{ width: 800 }} if we want for the width changes
-      title={type === "add" ? "Add Bus" : "Update bus"}
+      title={type === "add" && user?.isAdmin ? "Add Bus" : "Update bus"}
       visible={showBusForm}
       onCancel={() => {
         setSelectedBus(null);
@@ -67,29 +101,25 @@ function BusForm({
     >
       <Form layout="vertical" onFinish={onFinish} initialValues={selectedBus}>
         <Row gutter={[10, 10]}>
-          <Col lg={24} xs={24}>
-            <Form.Item label="Bus Name" name="name">
-              <input type="text" />
-            </Form.Item>
-          </Col>
+         
           <Col lg={12} xs={24}>
-            <Form.Item label="Bus Number" name="number">
-              <input type="text" />
+            <Form.Item label="Number Plate" name="number">
+                <input type="text" disabled={user?.isAdmin ? "false" : "true"} />
             </Form.Item>
           </Col>
           <Col lg={12} xs={24}>
             <Form.Item label="Capacity" name="capacity">
-              <input type="text" />
+                <input type="text" disabled={user?.isAdmin ? "false" : "true"} />
             </Form.Item>
           </Col>
           <Col lg={12} xs={24}>
             <Form.Item label="From" name="from">
-              <input type="text" />
+                <input type="text" disabled={user?.isAdmin ? "false" : "true"} />
             </Form.Item>
           </Col>
           <Col lg={12} xs={24}>
             <Form.Item label="To" name="to">
-              <input type="text" />
+                <input type="text" disabled={user?.isAdmin ? "false" : "true"} />
             </Form.Item>
           </Col>
 
@@ -102,19 +132,19 @@ function BusForm({
                 { validator: validateDate },
               ]}
             >
-              <input type="date" />
+              <input type="date"  disabled={user?.isAdmin ? "false" : "true"}/>
             </Form.Item>
           </Col>
 
           <Col lg={8} xs={24}>
             <Form.Item label="Departure" name="departure">
-              <input type="time" />
+              <input type="time" disabled={user?.isAdmin ? "false" : "true"} />
             </Form.Item>
           </Col>
 
           <Col lg={8} xs={24}>
             <Form.Item label="Arrival" name="arrival">
-              <input type="time" />
+              <input type="time" disabled={user?.isAdmin ? "false" : "true"} />
             </Form.Item>
           </Col>
 
@@ -124,7 +154,7 @@ function BusForm({
               name="type"
               rules={[{ required: true, message: "Please select a type." }]}
             >
-              <select name="" id="" required>
+              <select name="" id="" required disabled={user?.isAdmin ? "false" : "true"} >
                 <option value="AC">AC</option>
                 <option value="Non-AC">Non-AC</option>
               </select>
@@ -133,7 +163,7 @@ function BusForm({
 
           <Col lg={12} xs={24}>
             <Form.Item label="Fare" name="fare">
-              <input type="text" />
+                <input type="text" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
           </Col>
 
@@ -145,11 +175,24 @@ function BusForm({
                 <option value="Completed">Completed</option>
               </select>
             </Form.Item>
+            
+          </Col>
+          <Col lg={12} xs={24}>
+          <Form.Item label="Assign Operator" name="operator"    rules={[{ required: true, message: "Please select an operator." }]}>
+  <select name="operator" id="operator-select" disabled={user?.isAdmin ? "false" : "true"}>
+    {operators?.map((operator, key) => (
+      <option key={key} value={operator._id}>
+        {operator?.firstName ? operator.firstName : operator.name} 
+      </option>
+    ))}
+  </select>
+</Form.Item>
+            
           </Col>
         </Row>
         <div className="d-flex-justify-content-end">
           <button className="primary-btn" type="submit">
-            Save
+          {type === "add" && user?.isAdmin ? "Add Bus" : "Update bus"}
           </button>
         </div>
       </Form>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { message, Table } from "antd";
 import moment from "moment";
 import { HideLoading, ShowLoading } from "../../redux/alertsSlice";
@@ -9,6 +9,9 @@ import BusForm from "../../components/BusForm";
 
 function AdminUsers() {
   const dispatch = useDispatch();
+  //get user from dispatch
+  const user = useSelector((state) => state.users.user);
+
 
   const [users, setUsers] = useState([]);
 
@@ -39,7 +42,19 @@ function AdminUsers() {
           ...user,
           isAdmin: true,
         };
-      } else if (action === "remove-admin") {
+      }
+        else if (action === "make-operator") {
+          payload = {
+            ...user,
+            isOperator: true,
+          };
+      } else if (action === "remove-operator") {
+        payload = {
+          ...user,
+          isOperator: false,
+        };
+      }
+      else if (action === "remove-admin") {
         payload = {
           ...user,
           isAdmin: false,
@@ -61,6 +76,7 @@ function AdminUsers() {
         "http://localhost:5000/api/users/update-user-permissions",
         payload
       );
+      
       dispatch(HideLoading());
       if (response.data.success) {
         getUsers();
@@ -124,6 +140,8 @@ function AdminUsers() {
       render: (data) => {
         if (data?.isAdmin) {
           return "Admin";
+        } else if (data?.isOperator) {
+          return "Operator";
         } else {
           return "User";
         }
@@ -158,7 +176,7 @@ function AdminUsers() {
               Remove Admin
             </p>
           )}
-          {!record?.isAdmin && (
+          {!record?.isAdmin && !record?.isOperator && (
             <p
               className="underline"
               onClick={() => updateUserPermissions(record, "make-admin")}
@@ -166,6 +184,23 @@ function AdminUsers() {
               Make Admin
             </p>
           )}
+          {record?.isOperator && (
+            <p
+              className="underline"
+              onClick={() => updateUserPermissions(record, "remove-operator")}
+            >
+              Remove Operator
+            </p>
+          )}
+          {!record?.isOperator && !record?.isAdmin && (
+            <p
+              className="underline"
+              onClick={() => updateUserPermissions(record, "make-operator")}
+            >
+              Make Operator
+            </p>
+          )}
+
         </div>
       ),
     },
@@ -176,15 +211,22 @@ function AdminUsers() {
   };
 
   return (
-    <div>
-      <div className="d-flex justify-content-between my-2">
-        <PageTitle title="Users" />
+  <>
+    {user?.isAdmin && 
+     (<div>
+        <div className="d-flex justify-content-between my-2">
+          <PageTitle title="Users" />
+          <button onClick={handleGenerateUserReport}>Generate User Report</button>
+        </div>
+        <Table columns={columns} dataSource={users} />
+           </div>
+    
+     )
+  
+    }
+       </>
 
-        <button onClick={handleGenerateUserReport}>Generate User Report</button>
-      </div>
-
-      <Table columns={columns} dataSource={users} />
-    </div>
+  
   );
 }
 

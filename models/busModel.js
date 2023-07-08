@@ -1,10 +1,7 @@
 const mongoose = require("mongoose");
 
+
 const busSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
   number: {
     type: String,
     required: true,
@@ -48,6 +45,10 @@ const busSchema = new mongoose.Schema({
   status: {
     type: String,
     default: "Yet To Start",
+  },
+  operator: {
+    type: String,
+    required: true,
   },
 });
 module.exports = mongoose.model("buses", busSchema);

@@ -5,39 +5,42 @@ import { HideLoading, ShowLoading } from "../../redux/alertsSlice";
 import { axiosInstance } from "../../helpers/axiosIntance";
 import { message, Table } from "antd";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import moment from "moment";
 
-function AdminBuses() {
+function OperatorBuses() {
+  const user = useSelector((state) => state.users.user);
+  
   const dispatch = useDispatch();
   const [showBusForm, setShowBusForm] = React.useState(false);
   const [buses, setBuses] = useState([]);
   const [selectedBus, setSelectedBus] = useState(null);
 
-  const [users, setUsers] = useState([]);
-
-  const getUsers = async () => {
-    try {
-      dispatch(ShowLoading());
-      const response = await axiosInstance.post(
-        "http://localhost:5000/api/users/get-all-users",
-        {}
-      );
-      dispatch(HideLoading());
-      if (response.data.success) {
-        setUsers(response.data.data);
-      } else {
-        message.error(response.data.message);
-      }
-    } catch (error) {
-      dispatch(HideLoading());
-      message.error(error.message);
+  const [operators, setOperators] = useState([]);
+  console.log("user", user)
+  const operatorWithUserEmail = operators.find((operator) => operator.email === user.email);
+  console.log("operatorWithUserEmail", operatorWithUserEmail)
+  const operatorsBuses = buses.filter((bus) => bus.operator === operatorWithUserEmail._id);
+  console.log("operatorsBuses", operatorsBuses)
+const getOperators = async () => {
+  try {
+    dispatch(ShowLoading());
+    const response = await axiosInstance.get(
+      "http://localhost:5000/api/operator/get-all-operators",
+      {}
+    );
+    dispatch(HideLoading());
+    if (response.data.success) {
+      setOperators(response.data.data);
+    } else {
+      message.error(response.data.message);
     }
-  };
+  } catch (error) {
+    dispatch(HideLoading());
+    message.error(error.message);
+  }
+};
 
-useEffect (() => {
-  getUsers();
-}, [])
 
   const getBuses = async () => {
     try {
@@ -80,7 +83,6 @@ useEffect (() => {
     }
   };
 
-  console.log('buses', buses)
   //data tables
   const columns = [
     {
@@ -133,16 +135,17 @@ useEffect (() => {
 
   useEffect(() => {
     getBuses();
+    getOperators();
   }, []);
   return (
     <div>
       <div className="d-flex justify-content-between my-2">
         <PageTitle title="Buses" />
-        <button className="primary-btn" onClick={() => setShowBusForm(true)}>
+        {/* <button className="primary-btn" onClick={() => setShowBusForm(true)}>
           Add Bus
-        </button>
+        </button> */}
       </div>
-      <Table columns={columns} dataSource={buses} />
+      <Table columns={columns} dataSource={operatorsBuses} />
       {showBusForm && (
         <BusForm
           showBusForm={showBusForm}
@@ -151,11 +154,10 @@ useEffect (() => {
           selectedBus={selectedBus}
           setSelectedBus={setSelectedBus}
           getData={getBuses}
-          users={users}
         />
       )}
     </div>
   );
 }
 
-export default AdminBuses;
+export default OperatorBuses;

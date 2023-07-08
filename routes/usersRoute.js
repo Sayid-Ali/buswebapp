@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { model } = require("mongoose");
 const User = require("../models/usersModel");
+const Operator = require("../models/operatorModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
@@ -86,7 +87,7 @@ router.post("/login", async (req, res) => {
 
 // added code today 3/07/2023
 // Get user profile
-router.get("/profile/:userId", authMiddleware, async (req, res) => {
+router.get("/profile/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {
@@ -99,7 +100,7 @@ router.get("/profile/:userId", authMiddleware, async (req, res) => {
 });
 
 // Update user profile
-router.put("/profile/:userId", authMiddleware, async (req, res) => {
+router.patch("/profile/:userId", async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
       new: true,
@@ -164,6 +165,26 @@ router.post("/update-user-permissions", authMiddleware, async (req, res) => {
       data: null,
     });
   }
+  // add user to operator collection if isOperator is true
+  if (req.body.isOperator) {
+    //check if operator already exists
+    const operatorExists = await Operator.findOne({ email: req.body.email });
+    if (operatorExists) {
+      return;
+    }
+    
+    const operator = new Operator({
+      firstName: req.body.firstName,
+      middleName: req.body.middleName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
+      isOperator: req.body.isOperator,
+      isBlocked: req.body.isBlocked,
+    });
+    await operator.save();
+  }
+
 });
 // Get user profile
 router.get("/profile", authMiddleware, async (req, res) => {

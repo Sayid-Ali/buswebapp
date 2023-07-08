@@ -17,6 +17,7 @@ import FeedbackForm from "./components/FeedbackForm";
 import landingpage from "./screens/Landingpage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import Userprofile from "./components/Userprofile";
+import OperatorBuses from "./pages/Operator/OperatorBuses";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -93,6 +94,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminBookings />
+              </ProtectedRoute>
+            }
+          />
+            <Route
+            path="/operator/buses"
+            element={
+              <ProtectedRoute>
+                <OperatorBuses />
               </ProtectedRoute>
             }
           />
