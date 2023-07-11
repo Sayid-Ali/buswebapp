@@ -29,7 +29,10 @@ export const updateUserProfile = (updatedProfile) => {
       dispatch({ type: "USER_UPDATE_REQUEST" });
 
       // Make an API request to update the user profile
-      const response = await axios.put("/api/profile", updatedProfile);
+      const response = await axios.put(
+        "http://localhost:5000/api/profile",
+        updatedProfile
+      );
 
       dispatch({
         type: "USER_UPDATE_SUCCESS",

@@ -43,15 +43,15 @@ function Login() {
             <input type="password" />
           </Form.Item>
           <div className="d-flex justify-content-between align-items-center my-3">
-            <Link to="/register">Click here to Register</Link>
+            <Link to="/register">Don't have an account? Sign up </Link>
             <button className="secondary-btn" type="submit">
               Login
             </button>
           </div>
         </Form>
       </div>
-
-      <div className="footer">
+      <hr />
+      <div className="footer2">
         &copy; {new Date().getFullYear()} Mumtaz Bus LTD
       </div>
     </div>

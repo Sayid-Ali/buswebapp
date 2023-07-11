@@ -38,7 +38,7 @@ function Register() {
 
   return (
     <div className="h-screen d-flex justify-content-center align-items-center auth">
-      <div className="w-450 card p-3">
+      <div className="w-450 card p-4">
         <h1 className="text-lg">MBL Register</h1>
         <hr />
         <Form layout="vertical" onFinish={onFinish}>
@@ -49,10 +49,10 @@ function Register() {
               { required: true, message: "Please enter your First name!" },
             ]}
           >
-            <input type="text" />
+            <input type="text" style={{ width: "300px" }} />
           </Form.Item>
           <Form.Item label="Middle Name" name="middleName">
-            <input type="text" />
+            <input type="text" style={{ width: "300px" }} />
           </Form.Item>
           <Form.Item
             label="Last Name"
@@ -61,7 +61,7 @@ function Register() {
               { required: true, message: "Please enter your Last name!" },
             ]}
           >
-            <input type="text" />
+            <input type="text" style={{ width: "300px" }} />
           </Form.Item>
           <Form.Item
             label="Email"
@@ -75,7 +75,7 @@ function Register() {
               },
             ]}
           >
-            <input type="text" />
+            <input type="text" style={{ width: "300px" }} />
           </Form.Item>
           <Form.Item
             label="Password"
@@ -83,7 +83,10 @@ function Register() {
             rules={[{ required: true, message: "Please enter a password!" }]}
           >
             <div className="password-input">
-              <input type={passwordVisible ? "text" : "password"} />
+              <input
+                type={passwordVisible ? "text" : "password"}
+                style={{ width: "300px" }}
+              />
               <i
                 className={`password-icon ${
                   passwordVisible ? "fa fa-eye-slash" : "fa fa-eye"
@@ -113,7 +116,7 @@ function Register() {
               }),
             ]}
           >
-            <input type="password" />
+            <input type="password" style={{ width: "300px" }} />
           </Form.Item>
           <div className="d-flex justify-content-between align-items-center my-3">
             <Link to="/Login">Click here to Login</Link>
@@ -123,7 +126,8 @@ function Register() {
           </div>
         </Form>
       </div>
-      <div className="footer">
+      <hr />
+      <div className="footer2">
         &copy; {new Date().getFullYear()} Mumtaz Bus LTD
       </div>
     </div>
