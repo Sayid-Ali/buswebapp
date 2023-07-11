@@ -2,13 +2,16 @@
 
 import axios from "axios";
 
+
+
 export const getUserProfile = () => {
+ 
   return async (dispatch) => {
     try {
       dispatch({ type: "USER_PROFILE_REQUEST" });
 
       // Make an API request to fetch the user profile
-      const response = await axios.get("http://localhost:5000/api/profile");
+      const response = await axios.get("http://localhost:5000/api/users/profile");
 
       dispatch({
         type: "USER_PROFILE_SUCCESS",
@@ -23,16 +26,14 @@ export const getUserProfile = () => {
   };
 };
 
-export const updateUserProfile = (updatedProfile) => {
+export const updateUserProfile = (updatedProfile, userId) => {
+
   return async (dispatch) => {
     try {
       dispatch({ type: "USER_UPDATE_REQUEST" });
 
-      // Make an API request to update the user profile
-      const response = await axios.put(
-        "http://localhost:5000/api/profile",
-        updatedProfile
-      );
+      // Make an API/users request to update the user profile
+      const response = await axios.patch(`http://localhost:5000/api/users/profile/${userId}`, updatedProfile);
 
       dispatch({
         type: "USER_UPDATE_SUCCESS",

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserProfile, updateUserProfile } from "../actions/useractions";
-import { Input, Button } from "antd";
+import { Input, Button, notification } from "antd";
 
 const Userprofile = () => {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [middleName, setMiddleName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [idNumber, setIdNumber] = useState("")
 
   const user = useSelector((state) => state.users.user);
+  console.log("user", user);
 
   const dispatch = useDispatch();
 
@@ -17,29 +21,69 @@ const Userprofile = () => {
   }, []);
 
   useEffect(() => {
-    setName(user.name);
+    setFirstName(user.firstName);
+    setLastName(user.lastName);
+    setMiddleName(user.middleName);
     setEmail(user.email);
     setPhoneNumber(user.phoneNumber);
+    setIdNumber(user.idNumber);
   }, [user]);
 
   const handleUpdateProfile = () => {
+  
+    const userId = user._id
     const updatedProfile = {
-      name: name,
+      firstName: firstName,
+      lastName: lastName,
+      middleName: middleName,
       email: email,
       phoneNumber: phoneNumber,
+      idNumber: idNumber
     };
-    dispatch(updateUserProfile(updatedProfile));
+    dispatch(updateUserProfile(updatedProfile, userId))
+    .then(() => {
+      notification.success({
+        message: "Profile Update",
+        description: "Your profile has been successfully updated.",
+        duration: 3, // Auto close after 3 seconds
+        centered: true, // Centered on the page
+      });
+    })
+    .catch((error) => {
+      notification.error({
+        message: "Profile Update",
+        description: "An error occurred while updating your profile.",
+        duration: 3, // Auto close after 3 seconds
+        centered: true, // Centered on the page
+        // center it
+        
+      });
+    });
   };
 
   return (
     <div style={{ maxWidth: "500px", margin: "0 auto" }}>
       <h1>User Profile</h1>
       <Input
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        placeholder="firstName"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
         style={{ marginBottom: "16px" }}
       />
+      <Input
+        placeholder="middleName" 
+        value={middleName}
+        onChange={(e) => setMiddleName(e.target.value)}
+        style={{ marginBottom: "16px" }}
+      />
+      
+      <Input
+        placeholder="lastName"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+        style={{ marginBottom: "16px" }}
+      />
+      
       <Input
         placeholder="Email"
         value={email}
@@ -52,7 +96,13 @@ const Userprofile = () => {
         onChange={(e) => setPhoneNumber(e.target.value)}
         style={{ marginBottom: "16px" }}
       />
-      <Button onClick={handleUpdateProfile}>Update Profile</Button>
+      <Input 
+        placeholder="ID Number"
+        value={idNumber}
+        onChange={(e) => setIdNumber(e.target.value)}
+        style={{marginBottom: "16px"}}
+        />
+      <button className="primary-btn" onClick={handleUpdateProfile}>Update Profile</button>
     </div>
   );
 };

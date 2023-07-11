@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
+const operatorSchema = new mongoose.Schema(
   {
-    idNumber : {
-      type: String,
-      required: true,
-    },
     firstName: {
       type: String,
       required: true,
@@ -21,17 +17,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
     phoneNumber: {
       type: String,
-      required: true,
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
+      
     },
     isOperator: {
       type: Boolean,
@@ -48,6 +36,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-//
-
-module.exports = mongoose.model("users", userSchema);
+module.exports = mongoose.model("operators", operatorSchema);
