@@ -117,6 +117,10 @@ function LandingPage() {
                 <li>Garissa to Nairobi</li>
               </ul>
             </div>
+            <hr />
+            <p className="copy-right">
+              &copy;2023 MumtazBus. All Right Reserved
+            </p>
           </div>
         </div>
       </footer>

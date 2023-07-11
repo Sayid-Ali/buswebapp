@@ -1,7 +1,7 @@
-import React from 'react'
-import BusReports from '../../components/BusReports'
+import React from "react";
+import BusReports from "../../components/BusReports";
 // import * as d3 from 'd3';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from "react";
 
 // const BusRevenueChart = () => {
 //   const chartRef = useRef(null);
@@ -61,17 +61,13 @@ import { useRef, useEffect } from 'react';
 //   return <div ref={chartRef} style={{ width: '100%', height: '300px' }} />;
 // };
 
-
 function AdminDashboard() {
   return (
     <div>
-         <BusReports />
-        {/* <BusRevenueChart /> */}
-
-
+      <BusReports />
+      {/* <BusRevenueChart /> */}
     </div>
-   
-  )
+  );
 }
 
-export default AdminDashboard
+export default AdminDashboard;

@@ -20,7 +20,7 @@ function DefaultLayout1({ children }) {
     {
       name: "Bookings",
       icon: "ri-file-list-line",
-      path: "bookings",
+      path: "/bookings",
     },
     {
       name: "Profile",
