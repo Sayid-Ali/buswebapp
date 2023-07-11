@@ -13,7 +13,10 @@
     background-color: white;
   }
 .w-450{
-    width: 550px;
+    width: 450px;
+    margin-top: 60px;
+   /* padding-block: 2px; */
+   color: #0f020ad8;
   
   
 }

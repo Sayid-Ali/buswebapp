@@ -156,7 +156,8 @@ function Register() {
           </div>
         </Form>
       </div>
-      <div className="footer">
+      <hr />
+      <div className="footer2">
         &copy; {new Date().getFullYear()} Mumtaz Bus LTD
       </div>
     </div>

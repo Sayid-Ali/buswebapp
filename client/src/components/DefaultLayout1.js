@@ -15,8 +15,9 @@ function DefaultLayout1({ children }) {
     {
       name: "Home",
       icon: "ri-home-line",
-      path: "/",
+      path: "/home",
     },
+
     {
       name: "Bookings",
       icon: "ri-file-list-line",
@@ -41,7 +42,7 @@ function DefaultLayout1({ children }) {
   const adminMenu = [
     {
       name: "Home",
-      path: "/",
+      path: "/home",
       icon: "ri-home-line",
     },
     ,

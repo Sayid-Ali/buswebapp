@@ -1,6 +1,7 @@
 import { Col, Row } from "antd";
 import React from "react";
 import "../resources/bus.css";
+import { GiSteeringWheel } from "react-icons/gi";
 
 function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
   const capacity = bus.capacity;
@@ -14,6 +15,10 @@ function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
   };
   return (
     <div className="mx-5">
+      {/* DRIVER */}
+      <button className="border w-full p-2">
+        <GiSteeringWheel size={40} color="green" />
+      </button>
       <div className="bus-container">
         <Row gutter={[10, 10]}>
           {Array.from(Array(capacity).keys()).map((seat) => {
