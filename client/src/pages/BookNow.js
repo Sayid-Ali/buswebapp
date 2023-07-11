@@ -6,9 +6,15 @@ import { Col, Row, message } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import SeatSelection from "../components/SeatSelection";
 import StripeCheckout from "react-stripe-checkout";
+import PassengerForm from "../components/PassengerForm";
 
 function BookNow() {
+  const { user } = useSelector((state) => state.users);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [showPassengerForm, setShowPassengerForm] = useState(false);
+  const [showStripe, setShowStripe] = useState(false);
+  console.log('show stripe', showStripe)
+
   const params = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,52 +39,53 @@ function BookNow() {
       message.error(error.message);
     }
   };
-  const bookNow = async (transactionId) => {
-    try {
-      dispatch(ShowLoading());
-      const response = await axiosInstance.post(
-        "http://localhost:5000/api/bookings/book-seat",
-        {
-          bus: bus._id,
-          seats: selectedSeats,
-          transactionId,
-        }
-      );
-      dispatch(HideLoading());
-      if (response.data.success) {
-        message.success(response.data.message);
-        navigate("/bookings");
-      } else {
-        message.error(response.data.message);
-      }
-    } catch (error) {
-      dispatch(HideLoading());
-      message.error(error.message);
-    }
-  };
+  // const bookNow = async (transactionId) => {
+  //   try {
+  //     dispatch(ShowLoading());
+  //     const response = await axiosInstance.post(
+  //       "http://localhost:5000/api/bookings/book-seat",
+  //       {
+  //         bus: bus._id,
+  //         seats: selectedSeats,
+  //         transactionId,
+  //       }
+  //     );
+  //     dispatch(HideLoading());
+  //     if (response.data.success) {
+  //       message.success(response.data.message);
+  //       navigate("/bookings");
+  //     } else {
+  //       message.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     dispatch(HideLoading());
+  //     message.error(error.message);
+  //   }
+  // };
   //about the payment
-  const onToken = async (token) => {
-    try {
-      dispatch(ShowLoading());
-      const response = await axiosInstance.post(
-        "http://localhost:5000/api/bookings/make-payment",
-        {
-          token,
-          amount: selectedSeats.length * bus.fare * 100,
-        }
-      );
-      dispatch(HideLoading());
-      if (response.data.success) {
-        message.success(response.data.message);
-        bookNow(response.data.data.transactionId);
-      } else {
-        message.error(response.data.message);
-      }
-    } catch (error) {
-      dispatch(HideLoading());
-      message.error(error.message);
-    }
-  };
+  // const onToken = async (token) => {
+  //   try {
+  //     dispatch(ShowLoading());
+  //     const response = await axiosInstance.post(
+  //       "http://localhost:5000/api/bookings/make-payment",
+  //       {
+  //         token,
+  //         amount: selectedSeats.length * bus.fare * 100,
+  //       }
+  //     );
+  //     dispatch(HideLoading());
+  //     if (response.data.success) {
+  //       message.success(response.data.message);
+  //       bookNow(response.data.data.transactionId);
+  //     } else {
+  //       message.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     dispatch(HideLoading());
+  //     message.error(error.message);
+  //   }
+  // };
+  console.log('show stripe', showStripe)
 
   useEffect(() => {
     getBus();
@@ -88,7 +95,7 @@ function BookNow() {
       {bus && (
         <Row className="mt-3" gutter={[30, 30]}>
           <Col lg={12} xs={24} sm={24}>
-            <p className="text-lg primary-text">{bus.name}</p>
+            <p className="text-lg primary-text">{bus.number}</p>
             <p className="text-md">
               {bus.from} - {bus.to}
             </p>
@@ -115,26 +122,37 @@ function BookNow() {
                 Price:ksh {bus.fare * selectedSeats.length}/-
               </h1>
               <hr />
-              <StripeCheckout
-                billingAddress
-                token={onToken}
-                amount={bus.fare * selectedSeats.length * 100}
-                currency="KES"
-                stripeKey="pk_test_51NIsBDFTWFOfdLiuuDzFo81BBTv1BtJ6wOeo5KqoM4uFh4V6M88Bp04MEdzCx91HbKCoNBiwHzGlkaXZsU1wE1GV00IMud9F57"
+              <button
+                onClick={() => {  
+                  setShowPassengerForm(true);
+                  // setShowStripe(true);
+                }}
+                className={`${selectedSeats.length === 0 ? 'disabled-btn' : ''} primary-btn`}
               >
-                <button
-                  className={`primary-btn ${
-                    selectedSeats.length === 0 && "disabled-btn"
-                  }`}
-                  // onClick={bookNow}
-                  disabled={selectedSeats.length === 0}
-                >
-                  Book Now
-                </button>
-              </StripeCheckout>
+                Book Now
+              </button>
+
+              <PassengerForm 
+              showPassengerForm = {showPassengerForm}
+              setShowPassengerForm = {setShowPassengerForm}
+              selectedBusId = {bus._id}
+              userData = {user}
+              showStripe = {showStripe}
+              setShowStripe = {setShowStripe}
+              bus={bus}
+              selectedSeats={selectedSeats}
+               />
+               {
+                  showStripe ?  (
+                  ''
+                  ) : null
+
+               }
+
+              
             </div>
           </Col>
-          <Col lg={12} xs={24} sm={24}>
+          <Col lg={12} xs={24} sm={24} >
             <SeatSelection
               selectedSeats={selectedSeats}
               setSelectedSeats={setSelectedSeats}

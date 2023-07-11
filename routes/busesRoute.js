@@ -36,6 +36,21 @@ router.post("/delete-bus", authMiddleware, async (req, res) => {
   }
 });
 
+// get bus by id via params
+router.get("/get-bus-by-id/:_id", async (req, res) => {
+  try {
+    const bus = await Bus.findById(req.params.busId);
+    return res.status(200).send({
+      success: true,
+      message: "Bus fetched successfully",
+      data: bus,
+    });
+  } catch (error) {
+    res.status(500).send({ success: false, message: error.message });
+  }
+});
+
+
 //update bus
 router.post("/update-bus", authMiddleware, async (req, res) => {
   try {

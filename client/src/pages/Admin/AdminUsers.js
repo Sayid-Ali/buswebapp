@@ -121,7 +121,7 @@ function AdminUsers() {
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
+      dataIndex: "firstName",
     },
     {
       title: "Email",

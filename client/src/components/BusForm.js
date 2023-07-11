@@ -16,6 +16,7 @@ function BusForm({
 }) {
 
   const user = useSelector((state) => state.users.user);
+  console.log("user is admin", user.isAdmin)
 
 
 //get all operators from http://localhost:5000/api/operator/get-all-operators
@@ -92,7 +93,7 @@ useEffect (() => {
     <Modal
       width={800} //style={{ width: 800 }} if we want for the width changes
       title={type === "add" && user?.isAdmin ? "Add Bus" : "Update bus"}
-      visible={showBusForm}
+      open={showBusForm}
       onCancel={() => {
         setSelectedBus(null);
         setShowBusForm(false);
@@ -104,22 +105,22 @@ useEffect (() => {
          
           <Col lg={12} xs={24}>
             <Form.Item label="Number Plate" name="number">
-                <input type="text" disabled={user?.isAdmin ? "false" : "true"} />
+                <input type="text" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
           </Col>
           <Col lg={12} xs={24}>
             <Form.Item label="Capacity" name="capacity">
-                <input type="text" disabled={user?.isAdmin ? "false" : "true"} />
+                <input type="text" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
           </Col>
           <Col lg={12} xs={24}>
             <Form.Item label="From" name="from">
-                <input type="text" disabled={user?.isAdmin ? "false" : "true"} />
+                <input type="text" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
           </Col>
           <Col lg={12} xs={24}>
             <Form.Item label="To" name="to">
-                <input type="text" disabled={user?.isAdmin ? "false" : "true"} />
+                <input type="text" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
           </Col>
 
@@ -132,19 +133,19 @@ useEffect (() => {
                 { validator: validateDate },
               ]}
             >
-              <input type="date"  disabled={user?.isAdmin ? "false" : "true"}/>
+              <input type="date"  disabled={user?.isAdmin ? false : true}/>
             </Form.Item>
           </Col>
 
           <Col lg={8} xs={24}>
             <Form.Item label="Departure" name="departure">
-              <input type="time" disabled={user?.isAdmin ? "false" : "true"} />
+              <input type="time" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
           </Col>
 
           <Col lg={8} xs={24}>
             <Form.Item label="Arrival" name="arrival">
-              <input type="time" disabled={user?.isAdmin ? "false" : "true"} />
+              <input type="time" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
           </Col>
 
@@ -154,7 +155,7 @@ useEffect (() => {
               name="type"
               rules={[{ required: true, message: "Please select a type." }]}
             >
-              <select name="" id="" required disabled={user?.isAdmin ? "false" : "true"} >
+              <select name="" id="" required disabled={user?.isAdmin ? false : true} >
                 <option value="AC">AC</option>
                 <option value="Non-AC">Non-AC</option>
               </select>
@@ -179,9 +180,10 @@ useEffect (() => {
           </Col>
           <Col lg={12} xs={24}>
           <Form.Item label="Assign Operator" name="operator"    rules={[{ required: true, message: "Please select an operator." }]}>
-  <select name="operator" id="operator-select" disabled={user?.isAdmin ? "false" : "true"}>
-    {operators?.map((operator, key) => (
-      <option key={key} value={operator._id}>
+  <select name="operator" id="operator-select" disabled={user?.isAdmin ? false : true}>
+    {operators?.map((operator) => (
+      <option  value={operator._id} key={operator?._id} >
+      
         {operator?.firstName ? operator.firstName : operator.name} 
       </option>
     ))}

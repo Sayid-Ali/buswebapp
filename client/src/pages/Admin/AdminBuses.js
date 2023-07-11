@@ -114,14 +114,14 @@ useEffect (() => {
       render: (action, record) => (
         <div className="d-flex gap-3">
           <i
-            class="ri-pencil-line"
+            className="ri-pencil-line"
             onClick={() => {
               setSelectedBus(record);
               setShowBusForm(true);
             }}
           ></i>
           <i
-            class="ri-delete-bin-line"
+            className="ri-delete-bin-line"
             onClick={() => {
               deleteBus(record._id);
             }}
@@ -142,7 +142,7 @@ useEffect (() => {
           Add Bus
         </button>
       </div>
-      <Table columns={columns} dataSource={buses} />
+      <Table columns={columns} dataSource={buses} rowKey="_id" />
       {showBusForm && (
         <BusForm
           showBusForm={showBusForm}

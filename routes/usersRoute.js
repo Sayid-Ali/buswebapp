@@ -217,7 +217,9 @@ router.put("/profile", authMiddleware, async (req, res) => {
 // Add the following route handler to your router
 router.get("/generate-user-report", async (req, res) => {
   try {
-    const users = await User.find({});
+    //get users whose status is active
+    const users = await User.find({ isBlocked: false });
+
 
     // Create a new PDF document
     const doc = new PDFDocument();

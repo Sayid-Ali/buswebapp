@@ -6,11 +6,12 @@ import { axiosInstance } from "../../helpers/axiosIntance";
 import { message, Table } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 // import moment from "moment";
 
 function OperatorBuses() {
   const user = useSelector((state) => state.users.user);
-  
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showBusForm, setShowBusForm] = React.useState(false);
   const [buses, setBuses] = useState([]);
@@ -20,7 +21,7 @@ function OperatorBuses() {
   console.log("user", user)
   const operatorWithUserEmail = operators.find((operator) => operator.email === user.email);
   console.log("operatorWithUserEmail", operatorWithUserEmail)
-  const operatorsBuses = buses.filter((bus) => bus.operator === operatorWithUserEmail._id);
+  const operatorsBuses = buses.filter((bus) => bus.operator === operatorWithUserEmail?._id);
   console.log("operatorsBuses", operatorsBuses)
 const getOperators = async () => {
   try {
@@ -85,12 +86,9 @@ const getOperators = async () => {
 
   //data tables
   const columns = [
+ 
     {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
-      title: "Number",
+      title: "Number Plate",
       dataIndex: "number",
     },
     {
@@ -115,19 +113,29 @@ const getOperators = async () => {
       dataIndex: "action",
       render: (action, record) => (
         <div className="d-flex gap-3">
+          {/* // if bus is completed show green check mark */}
+          {record.status === "Completed" ? (
+            <i className="ri-check-line text-success"></i>
+          ) : (
           <i
-            class="ri-pencil-line"
+            className="ri-pencil-line"
             onClick={() => {
               setSelectedBus(record);
               setShowBusForm(true);
             }}
           ></i>
+          )}
           <i
-            class="ri-delete-bin-line"
+            className="ri-eye-line"
             onClick={() => {
-              deleteBus(record._id);
+              setSelectedBus(record);
+              // navigate("/operator/buses/" + record._id);
+             
+              navigate("/operator/buses/" + record._id, {state : {bus: record}});
             }}
           ></i>
+       
+          
         </div>
       ),
     },
@@ -145,7 +153,7 @@ const getOperators = async () => {
           Add Bus
         </button> */}
       </div>
-      <Table columns={columns} dataSource={operatorsBuses} />
+      <Table columns={columns} dataSource={operatorsBuses} rowKey="_id" />
       {showBusForm && (
         <BusForm
           showBusForm={showBusForm}

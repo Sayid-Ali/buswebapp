@@ -5,7 +5,7 @@ function Bus({ bus }) {
   const navigate = useNavigate();
   return (
     <div className="card p-2">
-      <h1 className="text-lg primary-text">{bus.name} </h1>
+      <h1 className="text-lg primary-text">{bus.number} </h1>
       <hr />
       <div className="d-flex justify-content-between">
         <div>

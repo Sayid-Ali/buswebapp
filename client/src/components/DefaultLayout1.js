@@ -6,8 +6,9 @@ import { Modal } from "antd";
 
 function DefaultLayout1({ children }) {
   const navigate = useNavigate();
-  const [collapsed, steCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false); // State for logout modal visibility
+  const [mobileMenu, setMobileMenu] = useState(false);
   const { user } = useSelector((state) => state.users);
   console.log(user);
   const userMenu = [
@@ -60,6 +61,11 @@ function DefaultLayout1({ children }) {
       icon: "ri-file-user-line",
     },
     {
+      name: "Profile",
+      icon: "ri-file-user-line",
+      path: "/profile",
+    },
+    {
       name: "Bookings",
       path: "/admin/bookings",
       icon: "ri-file-list-line",
@@ -83,10 +89,16 @@ function DefaultLayout1({ children }) {
         icon: "ri-bus-line",
       },
       {
+        name: "Profile",
+        icon: "ri-file-user-line",
+        path: "/profile",
+      },
+      {
         name: "Logout",
         path: "/logout",
         icon: "ri-logout-box-r-line",
       },
+
     
 
   ]
@@ -115,25 +127,49 @@ function DefaultLayout1({ children }) {
   return (
     <div className="layout-parent">
       <div className="sidebar">
+      <div className="mobile-menu-toggle">
+          {!mobileMenu ? (
+            <i
+            className="ri-menu-2-line"
+            onClick={() => setMobileMenu(true)}
+          ></i>
+        ) : (
+          <i
+            className="ri-close-circle-line"
+            onClick={() => setMobileMenu(false)}
+          ></i>
+        )}
+            
+        </div>
         <div className="sidebar-header">
           <h1 className="logo">MBL</h1>
-          <h1 className="role">
+          <span className="role">
             <h1 className="role">
               {user?.firstName ? user.firstName : user.name}
               <br />
               Role: {user && user?.isAdmin ? "Admin" : ( user?.isOperator ? "Operator" : "User")}
             </h1>
-          </h1>
+          </span>
         </div>
-        <div className="d-flex flex-column gap-3 justify-content-start menu">
+        <div className={`d-flex flex-column gap-3 justify-content-start
+                            ${mobileMenu ? 'mobile-menu' : 'menu'}`}>
           {menuToBeRendered.map((item, index) => {
+
             return (
               <div
+                key={index}
+                //add mobile menu class
                 className={`${
                   activeRoute === item.path && "active-menu-item"
-                } menu-item`}
+                }  ${mobileMenu ? 'mobile-menu-item' : 'menu-item'} `}
               >
-                <i className={item.icon}></i>
+                <i className={item.icon}   onClick={() => {
+                      if (item.path === "/logout") {
+                        showLogoutModal();
+                      } else {
+                        navigate(item.path);
+                      }
+                    }} ></i>
                 {!collapsed && (
                   <span
                     onClick={() => {
@@ -156,23 +192,24 @@ function DefaultLayout1({ children }) {
         <div className="header">
           {collapsed ? (
             <i
-              class="ri-menu-2-line"
-              onClick={() => steCollapsed(!collapsed)}
+              className="ri-menu-2-line"
+              onClick={() => setCollapsed(!collapsed)}
             ></i>
           ) : (
             <i
-              class="ri-close-circle-line"
-              onClick={() => steCollapsed(!collapsed)}
+              className="ri-close-circle-line"
+              onClick={() => setCollapsed(!collapsed)}
             ></i>
           )}
         </div>
+        
         <div className="content">{children} </div>
       </div>
 
       {/* Logout Confirmation Modal */}
       <Modal
         title="Logout"
-        visible={logoutModalVisible}
+        open={logoutModalVisible}
         onCancel={handleCancel}
         onOk={handleLogout}
       >

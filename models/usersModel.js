@@ -48,29 +48,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-//if operator is true, then add user to operator collection as well
-userSchema.pre("save", async function (next) {
-  if (this.isOperator) {
-    const Operator = require("./operatorModel");
-    //check if operator already exists
-    const operatorExists = await Operator.findOne({ email: this.email });
-    if (operatorExists) {
-      return next();
-    }
-    
-    const operator = new Operator({
-      firstName: this.firstName,
-      middleName: this.middleName,
-      lastName: this.lastName,
-      email: this.email,
-      phoneNumber: this.phoneNumber,
-      isOperator: this.isOperator,
-      isBlocked: this.isBlocked,
-    });
-    await operator.save();
-  }
-  next();
-});
-
+//
 
 module.exports = mongoose.model("users", userSchema);

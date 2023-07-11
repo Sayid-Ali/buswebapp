@@ -12,6 +12,7 @@ const Userprofile = () => {
   const [idNumber, setIdNumber] = useState("")
 
   const user = useSelector((state) => state.users.user);
+  console.log("user", user);
 
   const dispatch = useDispatch();
 
@@ -37,6 +38,7 @@ const Userprofile = () => {
       middleName: middleName,
       email: email,
       phoneNumber: phoneNumber,
+      idNumber: idNumber
     };
     dispatch(updateUserProfile(updatedProfile, userId))
     .then(() => {
@@ -100,7 +102,7 @@ const Userprofile = () => {
         onChange={(e) => setIdNumber(e.target.value)}
         style={{marginBottom: "16px"}}
         />
-      <Button onClick={handleUpdateProfile}>Update Profile</Button>
+      <button className="primary-btn" onClick={handleUpdateProfile}>Update Profile</button>
     </div>
   );
 };

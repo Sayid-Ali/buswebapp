@@ -18,6 +18,7 @@ import landingpage from "./screens/Landingpage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import Userprofile from "./components/Userprofile";
 import OperatorBuses from "./pages/Operator/OperatorBuses";
+import SingleOperatorBus from "./pages/Operator/SingleOperatorBus";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -105,6 +106,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/operator/buses/:id"
+            element={
+              <ProtectedRoute>
+                <SingleOperatorBus />
+              </ProtectedRoute>
+            }
+          />
+          
 
           <Route
             path="/register"

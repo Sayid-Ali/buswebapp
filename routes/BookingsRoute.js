@@ -6,6 +6,7 @@ const stripe = require("stripe")(process.env.stripe_key);
 const { v4: uuidv4 } = require("uuid");
 
 //Book a seat hre
+// Book a seat here
 router.post("/book-seat", authMiddleware, async (req, res) => {
   try {
     const newBooking = new Booking({
@@ -13,9 +14,12 @@ router.post("/book-seat", authMiddleware, async (req, res) => {
       user: req.body.userId,
     });
     await newBooking.save();
+    
     const bus = await Bus.findById(req.body.bus);
+    // bus.users = [...bus.users, ...req.body.users]; // Add the usersArray to the bus's users field
     bus.seatsBooked = [...bus.seatsBooked, ...req.body.seats];
     await bus.save();
+    
     res.status(200).send({
       message: "Booking Successfully",
       data: newBooking,
@@ -29,6 +33,7 @@ router.post("/book-seat", authMiddleware, async (req, res) => {
     });
   }
 });
+
 //Make Payment
 // make payment
 
@@ -114,5 +119,28 @@ router.post("/get-all-bookings", authMiddleware, async (req, res) => {
     });
   }
 });
+
+// get booking by bus id
+router.get("/get-bookings-by-bus-id", authMiddleware, async (req, res) => {
+  try {
+    const { busId } = req.query; // Retrieve busId from query parameter
+    const bookings = await Booking.find({ bus: busId })
+      // .populate("bus")
+      // .populate("user");
+    res.status(200).send({
+      message: "Bookings fetched successfully",
+      data: bookings,
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: "Bookings fetch failed",
+      data: error,
+      success: false,
+    });
+  }
+});
+
+
 
 module.exports = router;
