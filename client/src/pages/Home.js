@@ -62,7 +62,7 @@ function Home() {
         <Row gutter={10} align="center">
           <Col lg={6} sm={24}>
             <Select
-            style={{ width: "100%" }}
+              style={{ width: "100%" }}
               placeholder="From"
               value={filters.from}
               onChange={(value) => setFilters({ ...filters, from: value })}
@@ -78,7 +78,7 @@ function Home() {
           </Col>
           <Col lg={6} sm={24}>
             <Select
-            
+              style={{ width: "100%" }}
               placeholder="To"
               value={filters.to}
               onChange={(value) => setFilters({ ...filters, to: value })}
@@ -89,8 +89,6 @@ function Home() {
               <Option value="Elwak">Elwak</Option>
               <Option value="Mandera">Mandera</Option>
               <Option value="Isiolo">Isiolo</Option>
-
-            
 
               {/*  we can add more Option available locations */}
             </Select>

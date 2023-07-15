@@ -13,7 +13,7 @@ function BookNow() {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [showPassengerForm, setShowPassengerForm] = useState(false);
   const [showStripe, setShowStripe] = useState(false);
-  console.log('show stripe', showStripe)
+  console.log("show stripe", showStripe);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ function BookNow() {
   //     message.error(error.message);
   //   }
   // };
-  console.log('show stripe', showStripe)
+  console.log("show stripe", showStripe);
 
   useEffect(() => {
     getBus();
@@ -123,36 +123,32 @@ function BookNow() {
               </h1>
               <hr />
               <button
-                onClick={() => {  
+                onClick={() => {
                   setShowPassengerForm(true);
                   // setShowStripe(true);
                 }}
-                className={`${selectedSeats.length === 0 ? 'disabled-btn' : ''} primary-btn`}
+                className={`${
+                  selectedSeats.length === 0 ? "disabled-btn" : ""
+                } primary-btn`}
+                disabled={selectedSeats.length === 0}
               >
                 Book Now
               </button>
 
-              <PassengerForm 
-              showPassengerForm = {showPassengerForm}
-              setShowPassengerForm = {setShowPassengerForm}
-              selectedBusId = {bus._id}
-              userData = {user}
-              showStripe = {showStripe}
-              setShowStripe = {setShowStripe}
-              bus={bus}
-              selectedSeats={selectedSeats}
-               />
-               {
-                  showStripe ?  (
-                  ''
-                  ) : null
-
-               }
-
-              
+              <PassengerForm
+                showPassengerForm={showPassengerForm}
+                setShowPassengerForm={setShowPassengerForm}
+                selectedBusId={bus._id}
+                userData={user}
+                showStripe={showStripe}
+                setShowStripe={setShowStripe}
+                bus={bus}
+                selectedSeats={selectedSeats}
+              />
+              {showStripe ? "" : null}
             </div>
           </Col>
-          <Col lg={12} xs={24} sm={24} >
+          <Col lg={12} xs={24} sm={24}>
             <SeatSelection
               selectedSeats={selectedSeats}
               setSelectedSeats={setSelectedSeats}

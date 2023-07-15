@@ -108,6 +108,9 @@ h1,p{
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
 }
+#about1{
+    color: white;
+}
 
 /* spinner styling */
 .spinner-parent{

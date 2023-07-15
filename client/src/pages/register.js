@@ -8,14 +8,36 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../resources/auth.css";
 
-
 function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+  const validatePassword = (rule, value, callback) => {
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
+    if (value && !passwordRegex.test(value)) {
+      callback("Please enter a strong password!");
+    } else {
+      callback();
+    }
+  };
+
+  const validatePhoneNumber = (rule, value, callback) => {
+    const phoneNumberRegex = /^\d{1,10}$/;
+
+    if (value && !phoneNumberRegex.test(value)) {
+      callback(
+        "Please enter a valid phone number with a maximum of 10 digits!"
+      );
+    } else {
+      callback();
+    }
+  };
+
   const onFinish = async (values) => {
-    console.log(values)
+    console.log(values);
     try {
       dispatch(ShowLoading());
       const response = await axios.post(
@@ -74,7 +96,10 @@ function Register() {
                 name="email"
                 rules={[
                   { required: true, message: "Please enter your email!" },
-                  { type: "email", message: "Please enter a valid email address!" },
+                  {
+                    type: "email",
+                    message: "Please enter a valid email address!",
+                  },
                   {
                     pattern: /\.com$/,
                     message: "Email must end with '.com'!",
@@ -85,7 +110,7 @@ function Register() {
               </Form.Item>
             </Col>
             <Col span={12}>
-            <Form.Item
+              <Form.Item
                 label="ID Number"
                 name="idNumber"
                 rules={[
@@ -98,27 +123,40 @@ function Register() {
                 label="Phone Number"
                 name="phoneNumber"
                 rules={[
-                  { required: true, message: "Please enter your phone number!" },
+                  {
+                    required: true,
+                    message: "Please enter your phone number!",
+                  },
+                  {
+                    validator: validatePhoneNumber,
+                  },
                 ]}
               >
                 <input type="text" />
               </Form.Item>
-              
+
               <Form.Item
                 label="Password"
                 name="password"
-                rules={[{ required: true, message: "Please enter a password!" }]}
+                rules={[
+                  { required: true, message: "Please enter a password!" },
+                  {
+                    validator: validatePassword,
+                  },
+                ]}
               >
                 <div className="password-input">
                   <input type={passwordVisible ? "text" : "password"} />
-                 
+
                   <div
                     className={`password-icon ${
                       passwordVisible ? "fa fa-eye-slash" : "fa fa-eye"
                     }`}
                     onClick={togglePasswordVisibility}
                   >
-                     <FontAwesomeIcon icon={passwordVisible ? faEyeSlash : faEye} />
+                    <FontAwesomeIcon
+                      icon={passwordVisible ? faEyeSlash : faEye}
+                    />
                   </div>
                 </div>
               </Form.Item>
@@ -145,12 +183,11 @@ function Register() {
               >
                 <input type="password" />
               </Form.Item>
-              
             </Col>
           </Row>
           <div className="d-flex justify-content-between align-items-center my-3">
-            <Link to="/Login">Click here to Login</Link>
-            <button className="secondary-btn" type="submit">
+            <Link to="/Login"> Already registered? Login</Link>
+            <button className="secondary-btn register-btn" type="submit">
               Register
             </button>
           </div>

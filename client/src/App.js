@@ -19,6 +19,7 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import Userprofile from "./components/Userprofile";
 import OperatorBuses from "./pages/Operator/OperatorBuses";
 import SingleOperatorBus from "./pages/Operator/SingleOperatorBus";
+import ForgetPasswordPage from "./pages/Forgetpasswordpage";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -132,6 +133,14 @@ function App() {
             element={
               <PublicRoute>
                 <Login />
+              </PublicRoute>
+            }
+          />
+           <Route
+            path="/forgot-password"
+            element={
+              <PublicRoute>
+                <ForgetPasswordPage />
               </PublicRoute>
             }
           />

@@ -2,6 +2,7 @@
     background-color:blanchedalmond;
 }
 
+
 .password-input{
     position: relative;
     
@@ -10,6 +11,52 @@
     display: block;
     position: absolute;
     top: 2px;
-    right: 4px;
-
+    right: 2px;
+   
 }
+.login-btn{
+    border-radius: 4px;
+}
+.register-btn{
+    border:  1px solid rgb(45, 45, 42);
+    border-radius: 3px;
+}
+.password-icon :hover{
+    cursor: pointer;
+}
+.forgot-password-btn {
+    background-color: #e0e0e0;
+    color:white;
+    border: none;
+    padding: 8px 6px;
+    border-radius: 4px;
+    margin-right: 7px;
+  }
+  
+  .forgot-password-btn:hover {
+    background-color: #ccc;
+  }
+  /* .container4{
+    position: relative;
+    flex: content;
+    padding-left: 40px;
+    border: 2px solid gray;
+    align-items: center;
+    height: 400px;
+    width: 450px;
+  } */
+
+  .container4 {
+   
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 40px;
+    border: 1px solid gray;
+    border-radius: 2px;
+    align-items: center;
+    height: 400px;
+    width: 450px;
+  }
+  

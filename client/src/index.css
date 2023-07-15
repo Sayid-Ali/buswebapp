@@ -1,6 +1,8 @@
 :root {
   --primary: #058359;
-  --secondary: tomato;
+ 
+  /* --primary:#009B5D; */
+  --secondary: #05339e;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
@@ -14,13 +16,13 @@
 .zoom-out {
   font-family: sans-serif;
   font-weight: bold;
-  color: aliceblue !important;
+  color: white !important;
   position: relative;
   z-index: 1;
 }
 
 .landing {
-  background-color: black;
+  background-color: #070a08;
   height: 100vh;
 }
 
@@ -33,6 +35,7 @@
   color: black !important;
   margin-top: 20px;
 }
+
 .hero {
   background-color: #f2f2f2;
   padding: 40px 0;
@@ -46,7 +49,6 @@
   position: relative;
   margin-bottom: 20px;
 }
-
 
 .hero .card-img {
   height: 0;
@@ -65,10 +67,9 @@
   transition: transform 0.3s ease;
 }
 
-
 .hero .card-title-overlay {
   position: absolute;
-  bottom: 0; /* Position the card title at the bottom */
+  bottom: 0;
   left: 0;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
@@ -84,9 +85,11 @@
   transform: scale(1.05);
 }
 
+.bout1 {
+  color: #fff;
+}
 
-
-/* footer styling */
+/* Footer styling */
 
 .footer {
   background-color: #7f7f7f;
@@ -95,7 +98,7 @@
   margin-top: 40px;
 }
 
-.footer h4{
+.footer h4 {
   color: white;
 }
 
@@ -108,10 +111,26 @@
   margin-bottom: 10px;
   color: #fff;
 }
+
 .footer .reserved {
   text-align: center;
   color: white;
 }
 
+/* Media query for mobile devices */
 
+@media (max-width: 767px) {
+  .landing .col-md-9 {
+    border-right: none;
+    padding: 0;
+    text-align: center;
+  }
 
+  .landingbtn {
+    margin-top: 20px;
+  }
+
+  .hero .card {
+    margin-bottom: 30px;
+  }
+}

@@ -12,8 +12,10 @@ function LandingPage() {
     <div className="">
       <div className="landing row justify-content-center text-center">
         <div className="col-md-9 my-auto">
-          <h1 data-aos="zoom-in">Mumtaz Bus</h1>
-          <h2 data-aos="zoom-out">
+          <h1 data-aos="zoom-in" className="zoom-in">
+            Mumtaz Bus
+          </h1>
+          <h2 data-aos="zoom-out" className="zoom-out">
             We provide comfortable and affordable travel services.
           </h2>
           <Link to="/home">
@@ -27,7 +29,7 @@ function LandingPage() {
           <h2 className="text-center">Top travelled bus routes</h2>
           <div className="row">
             <div className="col-md-4">
-              <div className="card" data-aos="fade-up">
+              <div className="card">
                 <div className="card-img">
                   <img src={require("../images/bus-2.jpg")} alt="" />
                 </div>
@@ -39,7 +41,7 @@ function LandingPage() {
             <div className="col-md-4">
               <div className="card" data-aos="fade-up">
                 <div className="card-img">
-                  <img src={require("../images/bus-1.jpg")} alt="" />
+                  <img src={require("../images/mandera.jpg")} alt="" />
                 </div>
                 <div className="card-title-overlay">
                   <h5 className="card-title">Mandera City</h5>
@@ -47,7 +49,7 @@ function LandingPage() {
               </div>
             </div>
             <div className="col-md-4">
-              <div className="card" data-aos="fade-up">
+              <div className="card">
                 <div className="card-img">
                   <img src={require("../images/nairobi.jpg")} alt="" />
                 </div>
@@ -56,8 +58,9 @@ function LandingPage() {
                 </div>
               </div>
             </div>
+
             <div className="col-md-4">
-              <div className="card" data-aos="fade-up">
+              <div className="card">
                 <div className="card-img">
                   <img src={require("../images/bus-2.jpg")} alt="" />
                 </div>
@@ -67,9 +70,9 @@ function LandingPage() {
               </div>
             </div>
             <div className="col-md-4">
-              <div className="card" data-aos="fade-up">
+              <div className="card">
                 <div className="card-img">
-                  <img src={require("../images/mandera.jpg")} alt="" />
+                  <img src={require("../images/nbo-2.jpg")} alt="" />
                 </div>
                 <div className="card-title-overlay">
                   <h5 className="card-title">Garissa City</h5>
@@ -77,12 +80,12 @@ function LandingPage() {
               </div>
             </div>
             <div className="col-md-4">
-              <div className="card" data-aos="fade-up">
+              <div className="card">
                 <div className="card-img">
                   <img src={require("../images/G-1.jpg")} alt="" />
                 </div>
                 <div className="card-title-overlay">
-                  <h5 className="card-title">Kisumu</h5>
+                  <h5 className="card-title">Elwak</h5>
                 </div>
               </div>
             </div>
@@ -95,7 +98,7 @@ function LandingPage() {
           <div className="row">
             <div className="col-md-3">
               <h4>MumtazBus</h4>
-              <p>
+              <p id="about1">
                 Mumtaz Bus is a transportation company that provides comfortable
                 and affordable travel services. Book with us.
               </p>

@@ -1,10 +1,12 @@
+// seatselection.js
+import React, { useState } from "react";
 import { Col, Row } from "antd";
-import React from "react";
-import "../resources/bus.css";
+import { MdOutlineEventSeat } from "react-icons/md";
 import { GiSteeringWheel } from "react-icons/gi";
+import "../resources/bus.css"; // Import the CSS file
 
 function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
-  const capacity = bus.capacity;
+  const capacity = 59; // Set the desired capacity of 59 seats
 
   const selectOrUnselectSeats = (seatNumber) => {
     if (selectedSeats.includes(seatNumber)) {
@@ -13,28 +15,34 @@ function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
       setSelectedSeats([...selectedSeats, seatNumber]);
     }
   };
+
   return (
     <div className="mx-5">
-      {/* DRIVER */}
-      <button className="border w-full p-2">
-        <GiSteeringWheel size={40} color="green" />
-      </button>
       <div className="bus-container">
+        {/* DRIVER */}
+        <button className="border w-full p-2">
+          <GiSteeringWheel size={40} color="green" />
+        </button>
         <Row gutter={[10, 10]}>
-          {Array.from(Array(capacity).keys()).map((seat) => {
+          {Array.from(Array(capacity).keys()).map((index) => {
+            const seatNumber = index + 1;
             let seatClass = "";
-            if (selectedSeats.includes(seat + 1)) {
+            if (selectedSeats.includes(seatNumber)) {
               seatClass = "selected-seat";
-            } else if (bus.seatsBooked.includes(seat + 1)) {
+            } else if (bus.seatsBooked.includes(seatNumber)) {
               seatClass = "booked-seat";
             }
             return (
               <Col span={6}>
                 <div
                   className={`seat ${seatClass}`}
-                  onClick={() => selectOrUnselectSeats(seat + 1)}
+                  onClick={() => selectOrUnselectSeats(seatNumber)}
                 >
-                  {seat + 1}
+                  <MdOutlineEventSeat
+                    size={28}
+                    color={seatClass === "booked-seat" ? "white" : "black"}
+                  />
+                  {seatNumber}
                 </div>
               </Col>
             );

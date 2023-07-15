@@ -1,23 +1,28 @@
-.bus-container{
+/* bus.css */
+.bus-container {
     width: auto !important;
     border: 2px solid gray;
     padding: 10px;
-}
-.seat{
+  }
+  
+  .seat {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: .5rem;
-    border:  1px solid gray;
-    border-radius: 2px;
-}
-.selected-seat{
+    padding: 0.5rem;
+    border: 1px solid gray;
+    border-radius: 1px;
+  }
+  
+  .selected-seat {
     background-color: green;
     color: white;
-}
-.booked-seat{
+  }
+  
+  .booked-seat {
     background-color: gray;
     color: white;
     pointer-events: none !important;
     cursor: disabled !important;
-}
+  }
+  
