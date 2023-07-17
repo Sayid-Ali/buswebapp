@@ -19,6 +19,7 @@ function BookNow() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [bus, setBus] = useState(null);
+  console.log("bus", bus);
   const getBus = async () => {
     try {
       dispatch(ShowLoading());

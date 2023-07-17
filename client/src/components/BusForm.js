@@ -55,6 +55,7 @@ function BusForm({
     return Promise.resolve();
   };
   const onFinish = async (values) => {
+    console.log("values", values);
     try {
       dispatch(ShowLoading());
       let response = null;
@@ -84,6 +85,7 @@ function BusForm({
       dispatch(HideLoading());
     } catch (error) {
       message.error(error.message);
+      console.log('errorr',error);
       dispatch(HideLoading());
     }
   };
@@ -127,6 +129,22 @@ function BusForm({
               ]}
             >
               <input type="text" disabled={!user?.isAdmin} />
+            </Form.Item>
+          </Col>
+         
+          <Col lg={24} xs={24}>
+            <Form.Item
+              label="Journey Date"
+              name="journeyDate"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the bus journey date.",
+                },
+                { validator: validateDate },
+              ]}
+            >
+              <input type="date" disabled={!user?.isAdmin} />
             </Form.Item>
           </Col>
           <Col lg={12} xs={24}>
@@ -181,7 +199,7 @@ function BusForm({
           </Col>
           <Col lg={12} xs={24}>
             <Form.Item
-              label="Engine"
+              label="Engine Number"
               name="engine"
               rules={[
                 { required: true, message: "Please enter the bus engine." },
@@ -191,13 +209,13 @@ function BusForm({
             </Form.Item>
           </Col>
 
-          <Col lg={8} xs={24}>
+          <Col lg={12} xs={24}>
             <Form.Item label="Departure" name="departure">
               <input type="time" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
           </Col>
 
-          <Col lg={8} xs={24}>
+          <Col lg={12} xs={24}>
             <Form.Item label="Arrival" name="arrival">
               <input type="time" disabled={user?.isAdmin ? false : true} />
             </Form.Item>
@@ -224,7 +242,7 @@ function BusForm({
 
           <Col lg={12} xs={24}>
             <Form.Item label="Status" name="status">
-              <select name="" id="">
+              <select name="" id="" disabled={user?.isAdmin && type === 'add'} >
                 <option value="Yet To Start">Yet To Start</option>
                 <option value="Running">Running</option>
                 <option value="Completed">Completed</option>

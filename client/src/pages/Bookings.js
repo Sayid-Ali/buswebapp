@@ -13,7 +13,33 @@ function Bookings() {
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [bookings, setBookings] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [userBooked, setUserBooked] = useState(null);
   const dispatch = useDispatch();
+
+  const getUsers = async () => {
+    try {
+      dispatch(ShowLoading());
+      const response = await axiosInstance.post(
+        "http://localhost:5000/api/users/get-all-users",
+        {}
+      );
+      dispatch(HideLoading());
+      if (response.data.success) {
+        const allUsers = response.data.data;
+        const bookingUserIds = bookings.map((booking) => booking.user);
+        const usersForThisBus = allUsers.filter((user) =>
+          bookingUserIds.includes(user._id)
+        );
+        setUsers(usersForThisBus);
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
+    }
+  };
 
   const getBookings = async () => {
     try {
@@ -24,10 +50,12 @@ function Bookings() {
       );
       dispatch(HideLoading());
       if (response.data.success) {
+       
         const mappedData = response.data.data.map((booking) => {
           return {
             ...booking,
             ...booking.bus,
+            ...booking.bus.user,
             key: booking._id,
           };
         });
@@ -40,6 +68,10 @@ function Bookings() {
       message.error(error.message);
     }
   };
+
+  const usersForThisBus = users.filter((user) => user._id === userBooked);
+
+
   //table of the data in the bookings
   const columns = [
     {
@@ -48,6 +80,10 @@ function Bookings() {
       key: "",
       render: () => <span></span>,
     },
+    // {
+    //   title: "Name",
+    //   dataIndex: "user",
+    // },
     {
       title: "Bus Name",
       dataIndex: "name",
@@ -92,7 +128,9 @@ function Bookings() {
     },
   ];
   useEffect(() => {
+    getUsers();
     getBookings();
+
   }, []);
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
