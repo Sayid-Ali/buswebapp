@@ -5,18 +5,76 @@ import moment from "moment";
 import { HideLoading, ShowLoading } from "../../redux/alertsSlice";
 import { axiosInstance } from "../../helpers/axiosIntance";
 import PageTitle from "../../components/PageTitle";
-import BusForm from "../../components/BusForm";
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const { Option } = Select;
 
-function AdminUsers() {
+const styles = StyleSheet.create({
+  container: {
+    padding: 3,
+    width: "100%",
+  },
+  title: {
+    fontSize: 24,
+    
+    textAlign: "center",
+    backgroundColor: "green",
+    color: "white",
+  },
+  ptag: {
+    textAlign: "center",
+    fontSize: 14,
+    backgroundColor: "green",
+    color: "white",
+  },
+  date: {
+    textAlign: "center",
+    fontSize: 12,
+    backgroundColor: "green",
+    color: "#dbdbdb",
+  },
+  table: {
+    marginTop: 10,
+    display: "table",
+    width: "100%",
+    marginBottom: 10,
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#CCCCCC",
+  },
+  tableRow: {
+    flexDirection: "row",
+  },
+  tableHeader: {
+    backgroundColor: "#f2f2f2",
+    padding: 5,
+    fontSize: 10,
+    fontWeight: "bold",
+    flex: 1,
+    textAlign: "center",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#CCCCCC",
+  },
+  tableCell: {
+    padding: 5,
+    fontSize: 8,
+    flex: 1,
+    textAlign: "center",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#CCCCCC",
+  },
+});
+
+const AdminUsers = () => {
   const dispatch = useDispatch();
-  //get user from dispatch
   const user = useSelector((state) => state.users.user);
 
   const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState(null); // Added state for filtered users
-  const [filter, setFilter] = useState("all"); // Added state for filter selection
+  const [filteredUsers, setFilteredUsers] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [usertype, setUsertype] = useState("all users");
 
   const getUsers = async () => {
     try {
@@ -37,78 +95,58 @@ function AdminUsers() {
     }
   };
 
-  const updateUserPermissions = async (user, action) => {
+  const generateUserReport = () => {
     try {
-      let payload = null;
-      if (action === "make-admin") {
-        payload = {
-          ...user,
-          isAdmin: true,
-        };
-      } else if (action === "make-operator") {
-        payload = {
-          ...user,
-          isOperator: true,
-        };
-      } else if (action === "remove-operator") {
-        payload = {
-          ...user,
-          isOperator: false,
-        };
-      } else if (action === "remove-admin") {
-        payload = {
-          ...user,
-          isAdmin: false,
-        };
-      } else if (action === "block") {
-        payload = {
-          ...user,
-          isBlocked: true,
-        };
-      } else if (action === "unblock") {
-        payload = {
-          ...user,
-          isBlocked: false,
-        };
-      }
+      const data = filteredUsers || users;
 
-      dispatch(ShowLoading());
-      const response = await axiosInstance.post(
-        "http://localhost:5000/api/users/update-user-permissions",
-        payload
+      const MyDoc = () => (
+        <Document>
+          <Page size="A4">
+            <View style={styles.container}>
+              <Text style={styles.title}>Mumtaz bus ltd </Text>
+             <Text style={styles.ptag}>{usertype}</Text>
+             <Text style={styles.date}>
+              Date Printed: {new Date().toLocaleDateString()} at{" "}
+              {new Date().toLocaleTimeString()}
+            </Text>
+              <View style={styles.table}>
+                <View style={styles.tableRow}>
+                  <Text style={styles.tableHeader}>Name</Text>
+                  <Text style={styles.tableHeader}>Email</Text>
+                  <Text style={styles.tableHeader}>Status</Text>
+                  <Text style={styles.tableHeader}>Role</Text>
+                </View>
+                {data.map((user) => (
+                  <View style={styles.tableRow} key={user.email}>
+                    <Text style={styles.tableCell}>{user.firstName}</Text>
+                    <Text style={styles.tableCell}>{user.email}</Text>
+                    <Text style={styles.tableCell}>
+                      {user.isBlocked ? "Blocked" : "Active"}
+                    </Text>
+                    <Text style={styles.tableCell}>
+                      {user.isAdmin ? "Admin" : user.isOperator ? "Operator" : "User"}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </Page>
+        </Document>
       );
 
-      dispatch(HideLoading());
-      if (response.data.success) {
-        getUsers();
-        message.success(response.data.message);
-      } else {
-        message.error(response.data.message);
-      }
-    } catch (error) {
-      dispatch(HideLoading());
-      message.error(error.message);
-    }
-  };
-
-  const generateUserReport = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "http://localhost:5000/api/users/generate-user-report",
-        { responseType: "blob" }
+      return (
+        <PDFDownloadLink document={<MyDoc />} fileName="user_report.pdf">
+          {({ blob, url, loading, error }) =>
+            loading ? (
+              "Generating PDF..."
+            ) : (
+              <button className="primary-btn" type="primary">
+                Download as PDF
+              </button>
+            )
+          }
+        </PDFDownloadLink>
       );
-
-      // Create a blob URL from the response data
-      const blobUrl = URL.createObjectURL(response.data);
-
-      // Create a temporary anchor element to initiate the download
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = "user_report.pdf";
-      link.click();
-
-      // Clean up the temporary anchor element
-      URL.revokeObjectURL(blobUrl);
     } catch (error) {
       message.error(error.message);
     }
@@ -122,20 +160,31 @@ function AdminUsers() {
   const filterUsers = (filter) => {
     if (filter === "all") {
       setFilteredUsers(null);
+      setUsertype("all users");
     } else if (filter === "admins") {
       const admins = users.filter((user) => user.isAdmin);
+      setUsertype("admins");
       setFilteredUsers(admins);
-    } else if (filter === "users") {
+    } else if (filter === "operators") {
+      const operators = users.filter((user) => user.isOperator);
+      setFilteredUsers(operators);
+      setUsertype("operators");
+    }
+    else if (filter === "users") {
       const regularUsers = users.filter(
-        (user) => !user.isAdmin && !user.isBlocked
+        (user) => !user.isAdmin && !user.isBlocked && !user.isOperator
       );
+
       setFilteredUsers(regularUsers);
+      setUsertype("regular users");
     } else if (filter === "blocked") {
       const blockedUsers = users.filter((user) => user.isBlocked);
       setFilteredUsers(blockedUsers);
-    } else if (filter === "unblocked") {
+      setUsertype("blocked users");
+    } else if (filter === "active users") {
       const unblockedUsers = users.filter((user) => !user.isBlocked);
       setFilteredUsers(unblockedUsers);
+      setUsertype("active users");
     }
   };
 
@@ -147,7 +196,6 @@ function AdminUsers() {
     filterUsers(filter);
   }, [users, filter]);
 
-  // Define the columns variable here
   const columns = [
     {
       title: "Name",
@@ -177,67 +225,7 @@ function AdminUsers() {
         }
       },
     },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (action, record) => (
-        <div className="d-flex gap-3">
-          {record?.isBlocked && (
-            <p
-              className="underline"
-              onClick={() => updateUserPermissions(record, "unblock")}
-            >
-              UnBlock
-            </p>
-          )}
-          {!record?.isBlocked && (
-            <p
-              className="underline"
-              onClick={() => updateUserPermissions(record, "block")}
-            >
-              Block
-            </p>
-          )}
-          {record?.isAdmin && (
-            <p
-              className="underline"
-              onClick={() => updateUserPermissions(record, "remove-admin")}
-            >
-              Remove Admin
-            </p>
-          )}
-          {!record?.isAdmin && !record?.isOperator && (
-            <p
-              className="underline"
-              onClick={() => updateUserPermissions(record, "make-admin")}
-            >
-              Make Admin
-            </p>
-          )}
-          {record?.isOperator && (
-            <p
-              className="underline"
-              onClick={() => updateUserPermissions(record, "remove-operator")}
-            >
-              Remove Operator
-            </p>
-          )}
-          {!record?.isOperator && !record?.isAdmin && (
-            <p
-              className="underline"
-              onClick={() => updateUserPermissions(record, "make-operator")}
-            >
-              Make Operator
-            </p>
-          )}
-        </div>
-      ),
-    },
   ];
-
-  const handleGenerateUserReport = () => {
-    generateUserReport();
-  };
 
   return (
     <>
@@ -245,26 +233,25 @@ function AdminUsers() {
         <div>
           <div className="d-flex justify-content-between my-2">
             <PageTitle title="Registered Users" />
-            <button onClick={handleGenerateUserReport}>
-              Generate Report
-            </button>
+            {generateUserReport()}
           </div>
-          <Select 
+          <Select
             value={filter}
-            style={{ marginBottom: "16px", width:"15%" }}
+            style={{ marginBottom: "16px", width: "15%" }}
             onChange={handleFilterChange}
           >
             <Option value="all">All</Option>
             <Option value="admins">Admins</Option>
+            <Option value="operators">Operators</Option>
             <Option value="users">Users</Option>
             <Option value="blocked">Blocked Users</Option>
-            <Option value="unblocked">Unblocked Users</Option>
+            <Option value="active users">Unblocked Users</Option>
           </Select>
           <Table columns={columns} dataSource={filteredUsers || users} />
         </div>
       )}
     </>
   );
-}
+};
 
 export default AdminUsers;

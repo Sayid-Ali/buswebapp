@@ -10,6 +10,14 @@ const busSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  model: {
+    type: String,
+    
+  },
+  engine: {
+    type: String,
+    
+  },
   from: {
     type: String,
     required: true,

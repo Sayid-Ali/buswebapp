@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 
 //Book a seat hre
 // Book a seat here
-router.post("/book-seat", authMiddleware, async (req, res) => {
+router.post("/book-seat", async (req, res) => {
   try {
     const newBooking = new Booking({
       ...req.body,
@@ -37,7 +37,7 @@ router.post("/book-seat", authMiddleware, async (req, res) => {
 //Make Payment
 // make payment
 
-router.post("/make-payment", authMiddleware, async (req, res) => {
+router.post("/make-payment", async (req, res) => {
   try {
     const { token, amount } = req.body;
     const customer = await stripe.customers.create({
