@@ -143,7 +143,8 @@ function DefaultLayout1({ children }) {
             
         </div>
         <div className="sidebar-header">
-          <h1 className="logo">MBL</h1>
+          {/* <h1 className="logo">MBL</h1> */}
+          <img src="images/logo1.png" alt="" className="logo"/>
           <span className="role">
             <h1 className="role">
               {user?.firstName ? user.firstName : user.name}
