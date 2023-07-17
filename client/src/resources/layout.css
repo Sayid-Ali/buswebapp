@@ -140,3 +140,15 @@
         
     }
 }
+
+.logo {
+    display: flex;
+    align-items: center; /* Align the logo vertically */
+    font-size: 14px; 
+  }
+  
+  .logo img {
+    max-width: 100px; /* Set the maximum width for the logo image */
+    height: auto; /* Allow the height to adjust proportionally */
+    margin-right: 10px; /* Add some spacing between the logo image and text (optional) */
+  }

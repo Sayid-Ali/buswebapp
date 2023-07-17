@@ -66,7 +66,7 @@ function Login() {
               Login
             </button>
             <button
-              className="secondary-btn forgot-password-btn"
+              className="forgot-password-btn"
               type="button"
               onClick={handleForgotPassword}
             >
