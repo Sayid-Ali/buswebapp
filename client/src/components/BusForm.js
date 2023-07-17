@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from "react";
-import { Modal, Row, Col, Form, message } from "antd";
+import React, { useEffect, useState } from "react";
+import { Modal, Row, Col, Form, message, Select } from "antd";
 import { axiosInstance } from "../helpers/axiosIntance";
 import { useDispatch, useSelector } from "react-redux";
 import { HideLoading, ShowLoading } from "../redux/alertsSlice";
 import moment from "moment";
+
+const { Option } = Select;
 
 function BusForm({
   showBusForm,
@@ -14,40 +16,36 @@ function BusForm({
   setSelectedBus,
   users,
 }) {
-
   const user = useSelector((state) => state.users.user);
-  console.log("user is admin", user.isAdmin)
+  console.log("user is admin", user.isAdmin);
 
+  //get all operators from http://localhost:5000/api/operator/get-all-operators
+  const [operators, setOperators] = useState([]);
 
-//get all operators from http://localhost:5000/api/operator/get-all-operators
-const [operators, setOperators] = useState([]);
-
-const getOperators = async () => {
-  try {
-    dispatch(ShowLoading());
-    const response = await axiosInstance.get(
-      "http://localhost:5000/api/operator/get-all-operators",
-      {}
-    );
-    dispatch(HideLoading());
-    if (response.data.success) {
-      setOperators(response.data.data);
-    } else {
-      message.error(response.data.message);
+  const getOperators = async () => {
+    try {
+      dispatch(ShowLoading());
+      const response = await axiosInstance.get(
+        "http://localhost:5000/api/operator/get-all-operators",
+        {}
+      );
+      dispatch(HideLoading());
+      if (response.data.success) {
+        setOperators(response.data.data);
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
     }
-  } catch (error) {
-    dispatch(HideLoading());
-    message.error(error.message);
-  }
-};
+  };
 
-useEffect (() => {
-  getOperators();
+  useEffect(() => {
+    getOperators();
+  }, []);
 
-}, [])
-
- 
-  console.log('operators', operators)
+  console.log("operators", operators);
   const dispatch = useDispatch();
   const validateDate = (_, value) => {
     const currentDate = moment().format("YYYY-MM-DD");
@@ -64,7 +62,7 @@ useEffect (() => {
         response = await axiosInstance.post(
           "http://localhost:5000/api/buses/add-bus",
           values
-        ); //api/buses/add-bus
+        );
       } else {
         response = await axiosInstance.post(
           "http://localhost:5000/api/buses/update-bus",
@@ -89,9 +87,10 @@ useEffect (() => {
       dispatch(HideLoading());
     }
   };
+  
   return (
     <Modal
-      width={800} //style={{ width: 800 }} if we want for the width changes
+      width={800}
       title={type === "add" && user?.isAdmin ? "Add Bus" : "Update bus"}
       open={showBusForm}
       onCancel={() => {
@@ -102,38 +101,93 @@ useEffect (() => {
     >
       <Form layout="vertical" onFinish={onFinish} initialValues={selectedBus}>
         <Row gutter={[10, 10]}>
-         
           <Col lg={12} xs={24}>
-            <Form.Item label="Number Plate" name="number">
-                <input type="text" disabled={user?.isAdmin ? false : true} />
-            </Form.Item>
-          </Col>
-          <Col lg={12} xs={24}>
-            <Form.Item label="Capacity" name="capacity">
-                <input type="text" disabled={user?.isAdmin ? false : true} />
-            </Form.Item>
-          </Col>
-          <Col lg={12} xs={24}>
-            <Form.Item label="From" name="from">
-                <input type="text" disabled={user?.isAdmin ? false : true} />
-            </Form.Item>
-          </Col>
-          <Col lg={12} xs={24}>
-            <Form.Item label="To" name="to">
-                <input type="text" disabled={user?.isAdmin ? false : true} />
-            </Form.Item>
-          </Col>
-
-          <Col lg={8} xs={24}>
             <Form.Item
-              label="Journey Date"
-              name="journeyDate"
+              label="Number Plate"
+              name="number"
               rules={[
-                { required: true, message: "Please select a date." },
-                { validator: validateDate },
+                {
+                  required: true,
+                  message: "Please enter the bus number plate.",
+                },
               ]}
             >
-              <input type="date"  disabled={user?.isAdmin ? false : true}/>
+              <input type="text" disabled={!user?.isAdmin} />
+            </Form.Item>
+          </Col>
+          <Col lg={12} xs={24}>
+            <Form.Item
+              label="Capacity"
+              name="capacity"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the bus capacity.",
+                },
+              ]}
+            >
+              <input type="text" disabled={!user?.isAdmin} />
+            </Form.Item>
+          </Col>
+          <Col lg={12} xs={24}>
+            <Form.Item
+              label="From"
+              name="from"
+              rules={[
+                { required: true, message: "Please select a departure location." },
+              ]}
+            >
+              <Select
+                placeholder="Select a location"
+                disabled={!user?.isAdmin}
+              >
+                <Option value="Nairobi">Nairobi</Option>
+                <Option value="Garissa">Garissa</Option>
+                <Option value="Wajir">Wajir</Option>
+                <Option value="Mandera">Mandera</Option>
+                <Option value="Isiolo">Isiolo</Option>
+                {/* Add more options here if needed */}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col lg={12} xs={24}>
+            <Form.Item
+              label="To"
+              name="to"
+              rules={[
+                { required: true, message: "Please select a destination location." },
+              ]}
+            >
+              <Select placeholder="Select a location" disabled={!user?.isAdmin}>
+                <Option value="Nairobi">Nairobi</Option>
+                <Option value="Garissa">Garissa</Option>
+                <Option value="Wajir">Wajir</Option>
+                <Option value="Mandera">Mandera</Option>
+                <Option value="Isiolo">Isiolo</Option>
+                {/* Add more options here if needed */}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col lg={12} xs={24}>
+            <Form.Item
+              label="Model"
+              name="model"
+              rules={[
+                { required: true, message: "Please enter the bus model." },
+              ]}
+            >
+              <input type="text" disabled={!user?.isAdmin} />
+            </Form.Item>
+          </Col>
+          <Col lg={12} xs={24}>
+            <Form.Item
+              label="Engine"
+              name="engine"
+              rules={[
+                { required: true, message: "Please enter the bus engine." },
+              ]}
+            >
+              <input type="text" disabled={!user?.isAdmin} />
             </Form.Item>
           </Col>
 
@@ -188,6 +242,8 @@ useEffect (() => {
       </option>
     ))}
   </select>
+
+
 </Form.Item>
             
           </Col>

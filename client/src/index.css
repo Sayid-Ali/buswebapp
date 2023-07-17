@@ -1,8 +1,7 @@
 :root {
   --primary: #058359;
- 
   /* --primary:#009B5D; */
-  --secondary: #05339e;
+  --secondary: #ed6206;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
@@ -22,7 +21,9 @@
 }
 
 .landing {
-  background-color: #070a08;
+  /* background-color: #1E3A8A; */
+  /* background-color: #133b22; */
+  background-color:  #022e16;
   height: 100vh;
 }
 
@@ -71,8 +72,6 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
   padding: 10px;
 }
 
@@ -92,7 +91,8 @@
 /* Footer styling */
 
 .footer {
-  background-color: #7f7f7f;
+  /* background-color: #0415f7; */
+  background-color:  #022e16;
   color: white;
   padding: 30px 0;
   margin-top: 40px;
@@ -111,9 +111,18 @@
   margin-bottom: 10px;
   color: #fff;
 }
+.footer .col-md-3 ul li svg {
+  margin-right: 8px; 
+  font-size: 1.2rem; 
+
+}
+.footer .col-md-3 ul li svg :hover{
+  cursor: pointer;
+}
 
 .footer .reserved {
   text-align: center;
+ 
   color: white;
 }
 
@@ -132,5 +141,27 @@
 
   .hero .card {
     margin-bottom: 30px;
+  }
+
+  /* Horizontal alignment on larger screens */
+  .hero .row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .hero .col-md-3 {
+    flex: 0 0 auto;
+    margin-right: 10px;
+  }
+
+  /* Vertical alignment on small screens */
+  .hero .row {
+    display: block;
+    overflow-x: hidden;
+  }
+
+  .hero .col-md-3 {
+    margin-bottom: 20px;
   }
 }

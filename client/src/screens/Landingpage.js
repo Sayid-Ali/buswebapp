@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { FaFacebook, FaEnvelope, FaWhatsapp } from "react-icons/fa"; // imported icons
 
 AOS.init({
   duration: "2000",
@@ -25,73 +26,53 @@ function LandingPage() {
       </div>
 
       <section className="hero">
-        <div className="container">
-          <h2 className="text-center">Top travelled bus routes</h2>
-          <div className="row">
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-img">
-                  <img src={require("../images/bus-2.jpg")} alt="" />
-                </div>
-                <div className="card-title-overlay">
-                  <h5 className="card-title">Nairobi City</h5>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card" data-aos="fade-up">
-                <div className="card-img">
-                  <img src={require("../images/mandera.jpg")} alt="" />
-                </div>
-                <div className="card-title-overlay">
-                  <h5 className="card-title">Mandera City</h5>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-img">
-                  <img src={require("../images/nairobi.jpg")} alt="" />
-                </div>
-                <div className="card-title-overlay">
-                  <h5 className="card-title">Wajir City</h5>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-img">
-                  <img src={require("../images/bus-2.jpg")} alt="" />
-                </div>
-                <div className="card-title-overlay">
-                  <h5 className="card-title">Isiolo City</h5>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-img">
-                  <img src={require("../images/nbo-2.jpg")} alt="" />
-                </div>
-                <div className="card-title-overlay">
-                  <h5 className="card-title">Garissa City</h5>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-img">
-                  <img src={require("../images/G-1.jpg")} alt="" />
-                </div>
-                <div className="card-title-overlay">
-                  <h5 className="card-title">Elwak</h5>
-                </div>
-              </div>
-            </div>
+  <div className="container">
+    <h2 className="text-center">Top travelled bus routes</h2>
+    <div className="row">
+      <div className="col-md-3">
+        <div className="card">
+          <div className="card-img">
+            <img src={require("../images/nbo-11.jpg")} alt="" />
+          </div>
+          <div className="card-title-overlay">
+            <h5 className="card-title">Nairobi</h5>
           </div>
         </div>
-      </section>
+      </div>
+      <div className="col-md-3">
+        <div className="card">
+          <div className="card-img">
+            <img src={require("../images/mandera1.png")} alt="" />
+          </div>
+          <div className="card-title-overlay">
+            <h5 className="card-title">Mandera</h5>
+          </div>
+        </div>
+      </div>
+      <div className="col-md-3">
+        <div className="card">
+          <div className="card-img">
+            <img src={require("../images/bus-1.jpg")} alt="" />
+          </div>
+          <div className="card-title-overlay">
+            <h5 className="card-title">Wajir</h5>
+          </div>
+        </div>
+      </div>
+      <div className="col-md-3">
+        <div className="card">
+          <div className="card-img">
+            <img src={require("../images/garissa.png")} alt="" />
+          </div>
+          <div className="card-title-overlay">
+            <h5 className="card-title">Garissa</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       <footer className="footer">
         <div className="container">
@@ -122,9 +103,15 @@ function LandingPage() {
             <div className="col-md-3">
               <h4>Support</h4>
               <ul>
-                <li>Help</li>
-                <li>Email</li>
-                <li>Social media</li>
+                <li>
+                  <FaFacebook /> Facebook
+                </li>
+                <li>
+                  <FaEnvelope /> Email
+                </li>
+                <li>
+                  <FaWhatsapp /> Whatsapp
+                </li>
               </ul>
             </div>
             <hr />

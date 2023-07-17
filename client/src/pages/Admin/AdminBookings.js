@@ -47,11 +47,11 @@ function AdminBookings() {
       key: "",
       render: () => <span></span>,
     },
-    {
-      title: "Bus Name",
-      dataIndex: "name",
-      key: "bus",
-    },
+    // {
+    //   title: "Bus Name",
+    //   dataIndex: "name",
+    //   key: "bus",
+    // },
     {
       title: "Bus Number",
       dataIndex: "number",
