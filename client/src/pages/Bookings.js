@@ -156,8 +156,9 @@ function Bookings() {
           onOk={handlePrint}
         >
           <div className="d-flex flex-column p-5 " ref={componentRef}>
-            <p>Mumtaz Bus Limited</p>
-            <p>Bus: {selectedBooking?.name}</p>
+            <p style={{backgroundColor: 'green', color: 'white', padding: '1rem 1rem 0rem 0rem', textAlign:'center', marginBottom: '1rem', fontSize: '1.5rem'}}>Mumtaz Bus Limited</p>
+            <p>Name: {selectedBooking?.user?.firstName} {selectedBooking?.user?.middleName} {selectedBooking?.user?.lastName}</p>
+            <p>Bus: {selectedBooking?.number}</p>
             <p>
               {selectedBooking?.from} - {selectedBooking?.to}
             </p>
@@ -180,7 +181,7 @@ function Bookings() {
               {selectedBooking?.fare * selectedBooking?.seats.length} /-
             </p>
             <p>
-              <span>Printed Date:</span> {moment().format("DD-MM-YYYY")}
+              <span>Printed Date:</span> {moment().format("DD-MM-YYYY-HH:mm")}
             </p>
           </div>
         </Modal>

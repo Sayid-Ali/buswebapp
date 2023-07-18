@@ -95,6 +95,62 @@ const AdminUsers = () => {
     }
   };
 
+  const updateUserPermissions = async (user, action) => {
+    try {
+      let payload = null;
+      if (action === "make-admin") {
+        payload = {
+          ...user,
+          isAdmin: true,
+        };
+      }
+        else if (action === "make-operator") {
+          payload = {
+            ...user,
+            isOperator: true,
+          };
+      } else if (action === "remove-operator") {
+        payload = {
+          ...user,
+          isOperator: false,
+        };
+      }
+      else if (action === "remove-admin") {
+        payload = {
+          ...user,
+          isAdmin: false,
+        };
+      } else if (action === "block") {
+        payload = {
+          ...user,
+          isBlocked: true,
+        };
+      } else if (action === "unblock") {
+        payload = {
+          ...user,
+          isBlocked: false,
+        };
+      }
+
+      dispatch(ShowLoading());
+      const response = await axiosInstance.post(
+        "http://localhost:5000/api/users/update-user-permissions",
+        payload
+      );
+      
+      dispatch(HideLoading());
+      if (response.data.success) {
+        getUsers();
+        message.success(response.data.message);
+      } else {
+        window.location.reload();
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
+    }
+  };
+
   const generateUserReport = () => {
     try {
       const data = filteredUsers || users;
@@ -224,6 +280,63 @@ const AdminUsers = () => {
           return "User";
         }
       },
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (action, record) => (
+        <div className="d-flex gap-3">
+          {record?.isBlocked && (
+            <p
+              className="underline"
+              onClick={() => updateUserPermissions(record, "unblock")}
+            >
+              UnBlock
+            </p>
+          )}
+          {!record?.isBlocked && (
+            <p
+              className="underline"
+              onClick={() => updateUserPermissions(record, "block")}
+            >
+              Block
+            </p>
+          )}
+          {record?.isAdmin && (
+            <p
+              className="underline"
+              onClick={() => updateUserPermissions(record, "remove-admin")}
+            >
+              Remove Admin
+            </p>
+          )}
+          {!record?.isAdmin && !record?.isOperator && (
+            <p
+              className="underline"
+              onClick={() => updateUserPermissions(record, "make-admin")}
+            >
+              Make Admin
+            </p>
+          )}
+          {record?.isOperator && (
+            <p
+              className="underline"
+              onClick={() => updateUserPermissions(record, "remove-operator")}
+            >
+              Remove Operator
+            </p>
+          )}
+          {!record?.isOperator && !record?.isAdmin && (
+            <p
+              className="underline"
+              onClick={() => updateUserPermissions(record, "make-operator")}
+            >
+              Make Operator
+            </p>
+          )}
+
+        </div>
+      ),
     },
   ];
 
