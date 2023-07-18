@@ -77,8 +77,8 @@ function SingleOperatorBus() {
         const fullName = `${user?.firstName} ${user?.middleName} ${user?.lastName}`.toLowerCase();
         const idNumber = user?.idNumber.toLowerCase();
         return (
-          fullName.includes(value.toLowerCase()) ||
-          idNumber.includes(value.toLowerCase())
+          fullName?.includes(value.toLowerCase()) ||
+          idNumber?.includes(value.toLowerCase())
         );
       });
       setFilteredBookings(filtered);
