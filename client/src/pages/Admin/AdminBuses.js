@@ -83,12 +83,12 @@ useEffect (() => {
   console.log('buses', buses)
   //data tables
   const columns = [
+    // {
+    //   title: "Name",
+    //   dataIndex: "name",
+    // },
     {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
-      title: "Number",
+      title: "Plate Number",
       dataIndex: "number",
     },
     {

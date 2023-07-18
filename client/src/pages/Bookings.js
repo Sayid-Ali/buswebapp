@@ -50,12 +50,11 @@ function Bookings() {
       );
       dispatch(HideLoading());
       if (response.data.success) {
-       
         const mappedData = response.data.data.map((booking) => {
           return {
             ...booking,
             ...booking.bus,
-            ...booking.bus.user,
+            // ...booking.bus.user,
             key: booking._id,
           };
         });
@@ -70,7 +69,6 @@ function Bookings() {
   };
 
   const usersForThisBus = users.filter((user) => user._id === userBooked);
-
 
   //table of the data in the bookings
   const columns = [
@@ -128,10 +126,10 @@ function Bookings() {
     },
   ];
   useEffect(() => {
-    getUsers();
     getBookings();
-
+    getUsers();
   }, []);
+  console.log("boookings", bookings);
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,

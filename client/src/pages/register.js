@@ -186,9 +186,9 @@ function Register() {
             </Col>
           </Row>
           <div className="d-flex justify-content-between align-items-center my-3">
-            <Link to="/Login"> Already registered? Login</Link>
+            <Link to="/Login"> Already Have an account? Login</Link>
             <button className="secondary-btn register-btn" type="submit">
-              Register
+              Sign-up
             </button>
           </div>
         </Form>

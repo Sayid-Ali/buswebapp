@@ -143,14 +143,14 @@ function DefaultLayout1({ children }) {
             
         </div>
         <div className="sidebar-header">
-          {/* <h1 className="logo">MBL</h1> */}
-          <img src="images/logo1.png" alt="" className="logo"/>
+          <h3 className="logo">MBL</h3>
+          {/* <img src={require("../images/logo1.png")} className="logo" /> alt=""  */}
           <span className="role">
-            <h1 className="role">
+            <h3 className="role">
               {user?.firstName ? user.firstName : user.name}
               <br />
               Role: {user && user?.isAdmin ? "Admin" : ( user?.isOperator ? "Operator" : "User")}
-            </h1>
+            </h3>
           </span>
         </div>
         <div className={`d-flex flex-column gap-3 justify-content-start
